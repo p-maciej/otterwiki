@@ -23,6 +23,7 @@ from otterwiki.helper import (
     get_filename,
     get_pagename,
 )
+from otterwiki.translations import get_locale
 
 from otterwiki.util import (
     empty,
@@ -60,7 +61,7 @@ def housekeeping_form():
             drafts.append(d)
     return render_template(
         "tools/housekeeping.html",
-        title="Housekeeping",
+        title=get_locale("page_title_housekeeping"),
         drafts=drafts,
     )
 
@@ -79,7 +80,7 @@ def handle_housekeeping_drafts(form):
                 db.session.delete(draft)
                 deleted += 1
         if deleted > 0:
-            toast(f"Deleted {deleted} draft(s).")
+            toast(get_locale("toast_drafts_deleted").format(count=deleted))
             db.session.commit()
     return redirect(url_for("housekeeping"))
 
@@ -293,5 +294,5 @@ def handle_housekeeping(form):
     if form.get("task", None) == "brokenwikilinks":
         return handle_housekeeping_brokenwikilinks(form)
     # unkown task: display the form
-    toast("Unkown task", "error")
+    toast(get_locale("toast_unknown_task"), "error")
     return redirect(url_for("housekeeping"))

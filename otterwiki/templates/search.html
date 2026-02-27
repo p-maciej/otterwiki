@@ -6,10 +6,10 @@
 {% block content %}
 <div class="w-600 mw-full">
 <div class="card">
-  <h2 class="card-title">Search</h2>
+  <h2 class="card-title">{{ t.search_title }}</h2>
   <form action="{{url_for("search")}}" method="POST" class="form-inline">
   <div class="form-group">
-    <input type="text" class="form-control" name="query" id="search-query" placeholder="Search term" value="{{query if query}}" autofocus onfocus="this.setSelectionRange(this.value.length,this.value.length);">
+    <input type="text" class="form-control" name="query" id="search-query" placeholder="{{ t.search_placeholder }}" value="{{query if query}}" autofocus onfocus="this.setSelectionRange(this.value.length,this.value.length);">
   </div>
 {#
   <div class="form-group">
@@ -21,11 +21,11 @@
   <div class="form-group">
   <div class="custom-checkbox d-inline-block mr-10">
     <input type="checkbox" id="is_casesensitive" name="is_casesensitive" value="y" {{"checked" if is_casesensitive}}>
-    <label for="is_casesensitive">Match case</label>
+    <label for="is_casesensitive">{{ t.search_match_case }}</label>
   </div>
   <div class="custom-checkbox d-inline-block mr-10">
     <input type="checkbox" id="regexp" name="is_regexp" value="y" {{"checked" if is_regexp}}>
-    <label for="regexp">Regular expression</label>
+    <label for="regexp">{{ t.search_regexp }}</label>
   </div>
 {#
   <div class="custom-checkbox d-inline-block">
@@ -35,7 +35,7 @@
 #}
   </div>
   <div class="form-group">
-    <input class="btn btn-primary" type="submit" value="Search">
+    <input class="btn btn-primary" type="submit" value="{{ t.search_submit }}">
   </div>
 </form>
 </div>{# card #}
@@ -43,15 +43,15 @@
 {#
 #}
 {% if result %}
-<h1 class="content-title">Search matched {{keys | length}} page{%if keys | length >1%}s{%endif%}:</h1>
+<h1 class="content-title">{{ t.search_matched_count.format(count=keys|length, pages_word=t.search_pages if keys|length > 1 else t.search_page) }}</h1>
 {% for key in keys %}
 <h2 class="content-title mt-20"><a href="{{ url_for('view', path=key[3]) }}">{{key[4]|safe}}</a>
 {%- if key[0] == key[1] == 1 %}
-(Name matches)
+({{ t.search_name_matches }})
 {% elif key[0] == 1  %}
-(Name and {{key[1] - 1}} match{%if key[1] -1 != 1%}es{%endif%} found)</h2>
+({{ t.search_name_and_matches }} {{key[1] - 1}} {{ t.search_match }}{%if key[1] -1 != 1%}es{%endif%} found)</h2>
 {% else %}
-({{key[1]}} match{%if key[1]!=1%}es{%endif%} found)</h2>
+({{key[1]}} {{ t.search_match }}{%if key[1]!=1%}es{%endif%} found)</h2>
 {% endif -%}
 {% for match in result[key] %}
 {%- if match -%}
@@ -60,6 +60,6 @@
 {%- endfor -%}
 {% endfor %}
 {% else %}
-<h1 class="content-title">No match found.</h1>
+<h1 class="content-title">{{ t.search_no_match }}</h1>
 {% endif %}
 {% endblock %}

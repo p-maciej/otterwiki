@@ -6,25 +6,25 @@
     <input type="hidden" name="next" value="{{next}}">
 {% endif %}
   <div class="form-group">
-    <label for="email" class="required w-100">eMail Address</label>
-    <input type="text" class="form-control" name="email" id="email" placeholder="you@example.com" value="{{email if email}}" autofocus>
+    <label for="email" class="required w-100">{{ t.login_email_label }}</label>
+    <input type="text" class="form-control" name="email" id="email" placeholder="{{ t.login_email_placeholder }}" value="{{email if email}}" autofocus>
   </div>
   <div class="form-group">
-    <label for="password" class="required w-100">Password</label>
-    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+    <label for="password" class="required w-100">{{ t.login_password_label }}</label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="{{ t.login_password_placeholder }}">
   </div>
   <div class="form-group">
     <div class="custom-switch">
         <input type="checkbox" id="remember-my-information" name="remember" {{"checked" if remember}}>
-      <label for="remember-my-information">Remember me</label>
+      <label for="remember-my-information">{{ t.login_remember_me }}</label>
     </div>
   </div>
-  <input class="btn btn-primary" type="submit" value="Login">
+  <input class="btn btn-primary" type="submit" value="{{ t.login_submit }}">
 
   {% if not config.DISABLE_REGISTRATION %}
-  <a href="{{ url_for("register") }}" class="btn btn-link" role="button">Register</a>
+  <a href="{{ url_for("register") }}" class="btn btn-link" role="button">{{ t.login_register_link }}</a>
   {% endif %}
 
-  <a href="{{ url_for("lost_password") }}" class="btn btn-link" role="button">Lost your password?</a>
+  <a href="{{ url_for("lost_password") }}" class="btn btn-link" role="button">{{ t.login_lost_password_link }}</a>
 </form>
 {% endblock %}

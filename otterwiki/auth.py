@@ -31,6 +31,7 @@ from otterwiki.helper import (
     deserialize,
     SerializeError,
 )
+from otterwiki.translations import get_locale
 from otterwiki.models import User as UserModel
 from otterwiki.server import app, db
 from otterwiki.util import is_valid_email, is_valid_name
@@ -102,7 +103,7 @@ class SimpleAuth:
         # render template
         return render_template(
             "login.html",
-            title="Login",
+            title=get_locale("page_title_login"),
             email=email,
             remember=remember,
             next=next,
@@ -110,7 +111,7 @@ class SimpleAuth:
 
     def handle_logout(self):
         logout_user()
-        toast("You logged out successfully.")
+        toast(get_locale("toast_logged_out"))
         return redirect(url_for("login"))
 
     def check_credentials(self, email, password):
@@ -141,9 +142,8 @@ class SimpleAuth:
                 and not user.email_confirmed
             ):
                 toast(
-                    "Please confirm your email address. "
-                    + "<a href='{}'>Resend confirmation link.</a>".format(
-                        url_for("request_confirmation_link", email=email)
+                    get_locale("toast_confirm_email").format(
+                        url=url_for("request_confirmation_link", email=email)
                     ),
                     "warning",
                 )
@@ -151,7 +151,7 @@ class SimpleAuth:
             if not user.is_admin and (
                 self._user_needs_approvement() and not user.is_approved
             ):
-                toast("You are not approved yet.", "warning")
+                toast(get_locale("toast_not_approved"), "warning")
                 return redirect(url_for("login"))
             # login
             login_user(user, remember=remember is not None)
@@ -164,11 +164,13 @@ class SimpleAuth:
                     f"User has deprecated password hash: {user.email}"
                 )
                 toast(
-                    f"Please <a href='{url_for('settings')}'>update your password</a>. The hashing method used is deprecated. Check <a href='{url_for('settings')}'>settings</a> for additional information.",
+                    get_locale("toast_update_password").format(
+                        settings_url=url_for('settings')
+                    ),
                     "warning",
                 )
             else:
-                toast("You logged in successfully.", "success")
+                toast(get_locale("toast_logged_in"), "success")
             # update last_seen
             user.last_seen = datetime.now()
             db.session.add(user)
@@ -176,7 +178,7 @@ class SimpleAuth:
             # redirect
             return redirect(next_page)
         else:
-            toast("Invalid email address or password.", "error")
+            toast(get_locale("toast_invalid_credentials"), "error")
 
         return self.login_form(email, remember, next=next_page)
 
@@ -186,7 +188,7 @@ class SimpleAuth:
         # render template
         return render_template(
             "register.html",
-            title="Register",
+            title=get_locale("page_title_register"),
             email=email,
             name=name,
         )
@@ -216,11 +218,7 @@ class SimpleAuth:
         # send mail
         send_mail(subject=subject, recipients=[email], text_body=text_body)
         # notify user
-        toast(
-            "A request for confirmation has been sent to {}. Please check your mailbox.".format(
-                email
-            )
-        )
+        toast(get_locale("toast_confirmation_sent").format(email=email))
 
     def handle_request_confirmation(self, email):
         self.request_confirmation(email)
@@ -265,9 +263,9 @@ class SimpleAuth:
         else:
             # notify user
             if user.is_approved:
-                toast("Your account has been created. You can log in now.")
+                toast(get_locale("toast_account_created"))
             else:
-                toast("Your account is waiting for approval.", "warning")
+                toast(get_locale("toast_account_waiting_approval"), "warning")
             # notify admins
             if app.config['NOTIFY_ADMINS_ON_REGISTER']:
                 self.activated_user_notify_admins(name, email)
@@ -312,9 +310,9 @@ class SimpleAuth:
         db.session.commit()
 
         if user.is_approved:
-            toast("Your email address has been confirmed. You can log in now.")
+            toast(get_locale("toast_email_confirmed"))
         elif self._user_needs_approvement():
-            toast("Your account is waiting for approval.", "warning")
+            toast(get_locale("toast_account_waiting_approval"), "warning")
         # notify admins
         if app.config['NOTIFY_ADMINS_ON_REGISTER']:
             self.activated_user_notify_admins(user.name, user.email)
@@ -325,17 +323,17 @@ class SimpleAuth:
         name_check = is_valid_name(name)
         # check if email is valid
         if not is_valid_email(email):
-            toast("This email address is invalid.", "error")
+            toast(get_locale("toast_invalid_email"), "error")
         elif user is not None:
-            toast("This email address is already registered.", "error")
+            toast(get_locale("toast_email_already_registered"), "error")
         elif name is None or len(name) < 1:
-            toast("Please enter your name.", "error")
+            toast(get_locale("toast_enter_name"), "error")
         elif not name_check[0]:
-            toast(f"Error: Your {name_check[1]}", "error")
+            toast(get_locale("toast_name_error").format(error=name_check[1]), "error")
         elif password1 != password2:
-            toast("The passwords do not match.", "error")
+            toast(get_locale("toast_passwords_no_match"), "error")
         elif password1 is None or len(password1) < 8:
-            toast("The password must be at least 8 characters long.", "error")
+            toast(get_locale("toast_password_too_short"), "error")
         else:
             # register account
             self.create_user(email, name, password=password1)
@@ -350,13 +348,13 @@ class SimpleAuth:
             app.logger.warning(
                 "auth.handle_confirmation() Invalid token: {}".format(token)
             )
-            toast("Invalid token.", "error")
+            toast(get_locale("toast_invalid_token"), "error")
             # redirect
             return redirect(url_for("login"))
         # check if email exists
         user = self.User.query.filter_by(email=email).first()
         if user is None:
-            toast("Invalid user or token.", "error")
+            toast(get_locale("toast_invalid_user_or_token"), "error")
             return redirect(url_for("login"))
         # mark user as confirmed
         self.user_confirmed_email(email)
@@ -373,29 +371,27 @@ class SimpleAuth:
     def settings_form(self):
         return render_template(
             "settings.html",
-            title="Settings",
+            title=get_locale("page_title_settings"),
         )
 
     def handle_settings(self, form):
         if form.get("name") is not None:
             new_name = form.get("name")
             if len(new_name) < 1:
-                toast("Your name must be at least one character.")
+                toast(get_locale("toast_name_too_short"))
             else:
                 # update name
                 current_user.name = new_name
                 db.session.add(current_user)
                 db.session.commit()
-                toast("Your name was updated successfully.", "success")
+                toast(get_locale("toast_name_updated"), "success")
         if not empty(form.get("password1")) or not empty(
             form.get("password2")
         ):
             if form.get("password1") != form.get("password2"):
-                toast("The passwords do not match.", "error")
+                toast(get_locale("toast_passwords_no_match"), "error")
             elif len(form.get("password1")) < 8:
-                toast(
-                    "The password must be at least 8 characters long.", "error"
-                )
+                toast(get_locale("toast_password_too_short"), "error")
             else:
                 # update password
                 current_user.password_hash = generate_password_hash(
@@ -403,14 +399,14 @@ class SimpleAuth:
                 )
                 db.session.add(current_user)
                 db.session.commit()
-                toast("Your password was updated successfully.", "success")
+                toast(get_locale("toast_password_updated"), "success")
 
         return redirect(url_for("settings"))
 
     def lost_password_form(self):
         return render_template(
             "lost_password.html",
-            title="Lost password",
+            title=get_locale("page_title_lost_password"),
         )
 
     def handle_recover_password(self, email):
@@ -418,9 +414,9 @@ class SimpleAuth:
         user = self.User.query.filter_by(email=email).first()
         # check if email is valid
         if not is_valid_email(email):
-            toast("This email address is invalid.", "error")
+            toast(get_locale("toast_invalid_email"), "error")
         elif user is None:
-            toast("This email address is unknown.", "error")
+            toast(get_locale("toast_email_unknown"), "error")
         else:
             # recovery process
             token = serialize(email, salt="lost-password-email")
@@ -439,11 +435,7 @@ class SimpleAuth:
             # log recovery attempt
             app.logger.info("auth: Password recovery for: {}".format(email))
             # notify user
-            toast(
-                "A recovery link been sent to {}. Please check your mailbox.".format(
-                    email
-                )
-            )
+            toast(get_locale("toast_recovery_sent").format(email=email))
         return self.lost_password_form()
 
     def handle_recover_password_token(self, token):
@@ -455,7 +447,7 @@ class SimpleAuth:
             app.logger.warning(
                 "auth.recover_password_token() Invalid token: {}".format(token)
             )
-            toast("Invalid token.", "error")
+            toast(get_locale("toast_invalid_token"), "error")
             # redirect
             return redirect(url_for("login"))
         user = self.User.query.filter_by(email=email).first()
@@ -464,10 +456,10 @@ class SimpleAuth:
             app.logger.info(
                 "auth: Password recovery successful: {}".format(email)
             )
-            toast("Welcome {}, please update your password.".format(user.name))
+            toast(get_locale("toast_welcome_update_password").format(name=user.name))
             return redirect(url_for("settings"))
         else:
-            toast("Invalid email address.")
+            toast(get_locale("toast_invalid_email_address"))
         return lost_password_form()
 
     def has_permission(self, permission, user):
@@ -636,7 +628,7 @@ class ProxyHeaderAuth:
     def settings_form(self):
         return render_template(
             "settings.html",
-            title="Settings",
+            title=get_locale("page_title_settings"),
             user_list=None,  # no users are stored in the database anyways
         )
 
@@ -709,7 +701,7 @@ def handle_confirmation(*args, **kwargs):
 
 def register_form(*args, **kwargs):
     if app.config['DISABLE_REGISTRATION']:
-        toast("Registration is disabled.", "error")
+        toast(get_locale("toast_registration_disabled"), "error")
         return redirect(url_for("index"))
 
     return auth_manager.register_form(*args, **kwargs)

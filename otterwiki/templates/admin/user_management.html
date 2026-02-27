@@ -3,19 +3,19 @@
 {% block content %}
 <div class="card mx-auto mx-lg-20" id="user_mangement">
 <form action="{{ url_for("admin_user_management") }}" method="POST">
-<h2 class="card-title">User Management</h2>
+<h2 class="card-title">{{ t.admin_user_management_title }}</h2>
 <div class="table-responsive table-striped">
   <table class="table compact">
     <thead>
       <tr>
         <th>&nbsp;</th>
-        <th>eMail</th>
-        <th>Name</th>
-        <th><span class="hidden-md-and-down">Approved</span><span class="hidden-lg-and-up">Ap-<br/>proved</span></th>
-        <th>Read</th>
-        <th>Write</th>
-        <th>Upload</th>
-        <th>Admin</th>
+        <th>{{ t.admin_user_col_email }}</th>
+        <th>{{ t.admin_user_col_name }}</th>
+        <th><span class="hidden-md-and-down">{{ t.admin_user_col_approved }}</span><span class="hidden-lg-and-up">Ap-<br/>proved</span></th>
+        <th>{{ t.admin_user_col_read }}</th>
+        <th>{{ t.admin_user_col_write }}</th>
+        <th>{{ t.admin_user_col_upload }}</th>
+        <th>{{ t.admin_user_col_admin }}</th>
       </tr>
     </thead>
     <tbody>
@@ -75,15 +75,12 @@
   </table>
   </div>
   <div class="mt-10">
-      <em>Privileges granted per user</em> add <em>to the general permissions. For example, if in general
-          only users with the <strong>Admin</strong> flag are allowed to upload attachments, the
-          <tt>user@example.org</tt> can be allowed to <strong>Upload</strong> without being flagged as Admin.
-      </em>
+      {{ t.admin_user_privileges_note | safe }}
   </div>
   <div class="mt-10">
-    <input class="btn btn-primary" name="update_permissions" type="submit" value="Update Privileges" {% if not
+    <input class="btn btn-primary" name="update_permissions" type="submit" value="{{ t.admin_user_update_privileges_btn }}" {% if not
       auth_supported_features['editing'] %}disabled{% endif %}>
-    {% if auth_supported_features['editing'] %}&nbsp;<a href="{{ url_for("user", uid="") }}" class="btn">Add User</a>{% endif %}
+    {% if auth_supported_features['editing'] %}&nbsp;<a href="{{ url_for("user", uid="") }}" class="btn">{{ t.admin_user_add_btn }}</a>{% endif %}
   </div>
 </form>
 </div>

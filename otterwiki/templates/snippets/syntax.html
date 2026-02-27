@@ -7,7 +7,7 @@
 {% endif %}
 {% endmacro %}
 
-{{ heading("Emphasis") }}
+{{ heading(t.syntax_section_emphasis) }}
 <div class="row mb-10">
 <div class="col-md-6 col-sm-12">
 <pre class="block-compact">**<strong>bold</strong>**
@@ -17,94 +17,94 @@
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
-<strong>bold</strong><br/>
-<em>italics</em><br/>
-<strike>strikethrough</strike><br/>
-<mark>mark</mark>
+<strong>{{ t.syntax_emphasis_bold }}</strong><br/>
+<em>{{ t.syntax_emphasis_italics }}</em><br/>
+<strike>{{ t.syntax_emphasis_strikethrough }}</strike><br/>
+<mark>{{ t.syntax_emphasis_mark }}</mark>
 </div>
 </div>
-You can use backslash escapes to generate literal characters that are used for formatting otherwise, e.g.
+{{ t.syntax_emphasis_escape }}
 <div class="row">
 <div class="col-md-6 col-sm-12">
 <pre class="block-compact">
-\*literal asterisks\*
+\*{{ t.syntax_emphasis_literal_word }}\*
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
-*literal asterisks*
+\*{{ t.syntax_emphasis_literal_word }}\*
 </div>
 </div>
 
-{{ heading("Headings") }}
+{{ heading(t.syntax_section_headings) }}
 
 <div class="row align-bottom my-5">
-<div class="col-md-6 col-sm-12 align-bottom"><code># h1 - Large header</code></div>
-<div class="col-md-6 col-sm-12"><h1 class="p-0 m-0">h1 - Large Header</h1></div>
+<div class="col-md-6 col-sm-12 align-bottom"><code># h1 - {{ t.syntax_headings_large }}</code></div>
+<div class="col-md-6 col-sm-12"><h1 class="p-0 m-0">h1 - {{ t.syntax_headings_large }}</h1></div>
 </div>
 <div class="row align-bottom my-5">
-<div class="col-md-6 col-sm-12 align-bottom"><code>## h2 - Medium header</code></div>
-<div class="col-md-6 col-sm-12"><h2 class="p-0 m-0">h2 - Medium Header</h2></div>
+<div class="col-md-6 col-sm-12 align-bottom"><code>## h2 - {{ t.syntax_headings_medium }}</code></div>
+<div class="col-md-6 col-sm-12"><h2 class="p-0 m-0">h2 - {{ t.syntax_headings_medium }}</h2></div>
 </div>
 <div class="row align-bottom my-5">
-<div class="col-md-6 col-sm-12 align-bottom"><code>### h3 - Small header</code></div>
-<div class="col-md-6 col-sm-12"><h3 class="p-0 m-0">h3 - Small Header</h3></div>
+<div class="col-md-6 col-sm-12 align-bottom"><code>### h3 - {{ t.syntax_headings_small }}</code></div>
+<div class="col-md-6 col-sm-12"><h3 class="p-0 m-0">h3 - {{ t.syntax_headings_small }}</h3></div>
 </div>
 <div class="row align-bottom my-5">
-<div class="col-md-6 col-sm-12 align-bottom"><code>#### h4 - Tiny header</code></div>
-<div class="col-md-6 col-sm-12"><h4 class="p-0 m-0">h4 - Tiny Header</h4></div>
+<div class="col-md-6 col-sm-12 align-bottom"><code>#### h4 - {{ t.syntax_headings_tiny }}</code></div>
+<div class="col-md-6 col-sm-12"><h4 class="p-0 m-0">h4 - {{ t.syntax_headings_tiny }}</h4></div>
 </div>
 </table>
-{{ heading("Lists") }}
+{{ heading(t.syntax_section_lists) }}
 <div class="row">
 <div class="col-md-6 col-sm-12">
-<pre class="block-compact">- Generic list items
-- in an unordered list</pre>
+<pre class="block-compact">- {{ t.syntax_lists_generic_item }}
+- {{ t.syntax_lists_unordered }}</pre>
 </div>
 <div class="col-md-6 col-sm-12" style="padding-left:3rem;">
 <ul class="p-0 m-0">
-  <li class="p-0 m-0">Generic list items</li>
-  <li class="p-0 m-0">in a unordered list</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_generic_item }}</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_unordered }}</li>
 </ul>
 </div>
 </div>
 <br/>
 <div class="row">
 <div class="col-md-6 col-sm-12">
-<pre class="block-compact">1. List items
-2. in an ordered list
-3. numbered with numbers</pre>
+<pre class="block-compact">1. {{ t.syntax_lists_ordered_item }}
+2. {{ t.syntax_lists_ordered }}
+3. {{ t.syntax_lists_numbered }}</pre>
 </div>
 <div class="col-md-6 col-sm-12" style="padding-left:3rem;">
 <ol class="p-0 m-0">
-  <li class="p-0 m-0">List items</li>
-  <li class="p-0 m-0">in an ordered list</li>
-  <li class="p-0 m-0">numbered with numbers</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_ordered_item }}</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_ordered }}</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_numbered }}</li>
 </ol>
 </div>
 </div>
 <br/>
 <div class="row">
 <div class="col-md-6 col-sm-12">
-<pre class="block-compact">1. Numbered list with
-    - a nested
-    - unordered list
-2. inside</pre>
+<pre class="block-compact">1. {{ t.syntax_lists_numbered_with }}
+    - {{ t.syntax_lists_nested }}
+    - {{ t.syntax_lists_unordered }}
+2. {{ t.syntax_lists_inside }}</pre>
 </div>
 <div class="col-md-6 col-sm-12" style="padding-left:3rem;">
 <ol class="p-0 m-0">
-  <li class="p-0 m-0">Numbered list with
+  <li class="p-0 m-0">{{ t.syntax_lists_numbered_with }}
     <ul class="p-0 pl-20 m-0">
-      <li class="p-0 m-0">a nested</li>
-      <li class="p-0 m-0">unordered list</li>
+      <li class="p-0 m-0">{{ t.syntax_lists_nested }}</li>
+      <li class="p-0 m-0">{{ t.syntax_lists_unordered }}</li>
     </ul>
   </li>
-  <li class="p-0 m-0">inside</li>
+  <li class="p-0 m-0">{{ t.syntax_lists_inside }}</li>
 </ol>
 </div>
-<p class="mt-0 pt-0"><em>Note: To create nested sublists, they must be indented the same number of spaces that a paragraph would need to be in order to be included in the list item. In other words, sublist markers must match the indentation of the content of the outer list items.</em></p>
+<p class="mt-0 pt-0"><em>{{ t.syntax_lists_note }}</em></p>
 </div>
 
-{{ heading("Links") }}
+{{ heading(t.syntax_section_links) }}
 <div class="row">
 <div class="col-md-6 col-sm-12">
 <pre class="block-compact text-wrap">[[WikiPage]]</pre>
@@ -117,13 +117,13 @@ You can use backslash escapes to generate literal characters that are used for f
 <div class="row">
 <div class="col-md-6 col-sm-12">
 {% if config.WIKILINK_STYLE.upper() == "LINKTITLE" %}
-<pre class="block-compact text-wrap">[[WikiPage|Text to display]]</pre>
+<pre class="block-compact text-wrap">[[WikiPage|{{ t.syntax_links_text_to_display }}]]</pre>
 {% else %}
-<pre class="block-compact text-wrap">[[Text to display|WikiPage]]</pre>
+<pre class="block-compact text-wrap">[[{{ t.syntax_links_text_to_display }}|WikiPage]]</pre>
 {% endif %}
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
-  <a href="#">Text to display</a>
+  <a href="#">{{ t.syntax_links_text_to_display }}</a>
 </div>
 </div>
 
@@ -138,40 +138,40 @@ You can use backslash escapes to generate literal characters that are used for f
 
 <div class="row">
 <div class="col-md-6 col-sm-12">
-<pre class="block-compact text-wrap">[Link with text](http://example.com)</pre>
+<pre class="block-compact text-wrap">[{{ t.syntax_links_link_with_text }}](http://example.com)</pre>
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
-  <a href="#">Link with text</a>
+  <a href="#">{{ t.syntax_links_link_with_text }}</a>
 </div>
 </div>
 {% if config.WIKILINK_STYLE.upper() == "LINKTITLE" %}
-<p><em>Note: WikiLink-Style is in compatibility mode.</em></p>
+<p><em>{{ t.syntax_links_wikilink_compat_note }}</em></p>
 {% endif %}
 
-{{ heading("Quotes") }}
+{{ heading(t.syntax_section_quotes) }}
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
-<pre class="block-compact">&gt; This is a quote.
-&gt; It can span multiple lines!
-&gt;&gt; And multiple levels.
-&gt;&gt; *<em>With markdown syntax.</em>*</pre>
+<pre class="block-compact">&gt; {{ t.syntax_quotes_line1 }}
+&gt; {{ t.syntax_quotes_line2 }}
+&gt;&gt; {{ t.syntax_quotes_line3 }}
+&gt;&gt; *<em>{{ t.syntax_quotes_line4 }}</em>*</pre>
 </div>
 <div class="col-md-6 col-sm-12 page p-5">
-<blockquote class="m-t-0" style="margin-block-start: 0"><p style="margin-block-start: 0">This is a quote.
-It can span multiple lines!</p>
-<blockquote style="margin-block-start: 0"><p style="margin-block-start: 0">And multiple levels.</br>
-<em>With markdown syntax.</em></p>
+<blockquote class="m-t-0" style="margin-block-start: 0"><p style="margin-block-start: 0">{{ t.syntax_quotes_line1 }}
+{{ t.syntax_quotes_line2 }}</p>
+<blockquote style="margin-block-start: 0"><p style="margin-block-start: 0">{{ t.syntax_quotes_line3 }}</br>
+<em>{{ t.syntax_quotes_line4 }}</em></p>
 </blockquote>
 </blockquote>
 </div>
 </div>
 
-{{ heading("Images") }}
-<p>You can copy n paste images directly into the editor, they will be uploaded as attachments.</p>
+{{ heading(t.syntax_section_images) }}
+<p>{{ t.syntax_images_paste }}</p>
 <pre class="block-compact">![](http://www.example.com/image.jpg)</pre>
-<p>Check the attachments of a page, there are links for copy'n'paste.</p>
+<p>{{ t.syntax_images_attachments }}</p>
 
-{{ heading("Tables") }}
+{{ heading(t.syntax_section_tables) }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
@@ -183,9 +183,9 @@ It can span multiple lines!</p>
 <div class="col-md-6 col-sm-12 p-5 page">
 <table>
 <thead><tr>
-<th>Column 1</th>
-<th>Column 2</th>
-<th>Column 3</th>
+<th>{{ t.syntax_table_col1 }}</th>
+<th>{{ t.syntax_table_col2 }}</th>
+<th>{{ t.syntax_table_col3 }}</th>
 </tr>
 </thead>
 <tbody>
@@ -204,13 +204,13 @@ It can span multiple lines!</p>
 </div>
 </div>
 
-{{ heading("Code") }}
+{{ heading(t.syntax_section_code) }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
-<pre class="block-compact text-wrap">Inline code `int n = 1` with backticks.</pre></div>
+<pre class="block-compact text-wrap">{{ t.syntax_code_inline_example | safe }}</pre></div>
 <div class="col-md-6 col-sm-12 p-5">
-Inline code <code>int n = 1</code> with backticks.
+{{ t.syntax_code_inline_example | safe }}
 </div>
 </div>
 
@@ -218,16 +218,16 @@ Inline code <code>int n = 1</code> with backticks.
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre>```
-Code Blocks
+{{ t.syntax_code_blocks_example }}
 ```</pre></div>
 <div class="col-md-6 col-sm-12 p-5">
-<pre>Code Blocks</pre>
+<pre>{{ t.syntax_code_blocks_example }}</pre>
 </div>
 </div>
 
 
 <div class="row">
-To add syntax highlighting, specify a language next to the backticks before the fenced code block.
+{{ t.syntax_code_syntax_highlight }}
 </div>
 
 <div class="row">
@@ -247,7 +247,7 @@ print("Hello World!")
 </div>
 
 <div class="row">
-To enable line numbers in the code block, append an equal sign <code>=</code> to the language.
+{{ t.syntax_code_line_numbers }} <code>=</code> {{ t.syntax_code_line_numbers_suffix }}
 </div>
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
@@ -261,47 +261,47 @@ print("Hello Line Numbers!")
 </div>
 </div>
 
-{{ heading("Mathjax") }}
+{{ heading(t.syntax_section_mathjax) }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
-<pre class="block-compact text-wrap">Inline math: `$a^2+b^2=c^2$`</pre></div>
+<pre class="block-compact text-wrap">{{ t.syntax_mathjax_inline_label }} `$a^2+b^2=c^2$`</pre></div>
 <div class="col-md-6 col-sm-12 p-5">
-Inline Math: \(a^2+b^2=c^2\)
+{{ t.syntax_mathjax_inline_label }} \(a^2+b^2=c^2\)
 </div>
 </div>
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
   <pre class="block-compact">
-Math block:
+{{ t.syntax_mathjax_block_label }}
 ```math
 a^2+b^2=c^2
 ```
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 p-5">
-Math block:</br>
+{{ t.syntax_mathjax_block_label }}</br>
 \[a^2+b^2=c^2\]
 </div>
 </div>
 
-\(\TeX\) like syntax:
+\(\TeX\) {{ t.syntax_mathjax_tex_like }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
-Inline Math: $a^2+b^2=c^2$
+{{ t.syntax_mathjax_inline_label }} $a^2+b^2=c^2$
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 p-5">
-Inline Math: \(a^2+b^2=c^2\)
+{{ t.syntax_mathjax_inline_label }} \(a^2+b^2=c^2\)
 </div>
 </div>
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
-Equation:
+{{ t.syntax_mathjax_equation_label }}
 $$a^2+b^2=c^2$$
 </pre>
 </div>
@@ -310,86 +310,84 @@ $$a^2+b^2=c^2$$
 </div>
 </div>
 
-{{ heading("Footnotes") }}
+{{ heading(t.syntax_section_footnotes) }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
-Footnote identifiers[^1] are single characters
-or words[^bignote]. And can be referenced
-multiple[^1] times.
+{{ t.syntax_footnotes_line1 }}[^1] {{ t.syntax_footnotes_line2 }}
+{{ t.syntax_footnotes_line3 }}[^bignote]. {{ t.syntax_footnotes_line4 }}
+{{ t.syntax_footnotes_line5 }}[^1] {{ t.syntax_footnotes_line6 }}
 
-[^1]: Footnotes can be a single line.
+[^1]: {{ t.syntax_footnotes_single }}
 
-[^bignote]: Or more complex.
+[^bignote]: {{ t.syntax_footnotes_complex }}
 
-    Indent paragraphs to include them
-    in the footnote.
+    {{ t.syntax_footnotes_indent }}
+    {{ t.syntax_footnotes_indent2 }}
 
-    Add as many paragraphs as you like.
+    {{ t.syntax_footnotes_add }}
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 p-5">
-Footnote identifiers<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> are single characters or words<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. And can be referenced multiple<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> times.
+{{ t.syntax_footnotes_line1 }}<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> {{ t.syntax_footnotes_line2 }} {{ t.syntax_footnotes_line3 }}<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. {{ t.syntax_footnotes_line4 }} {{ t.syntax_footnotes_line5 }}<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> {{ t.syntax_footnotes_line6 }}
 <hr/>
 <section class="footnotes">
 <ol>
-<li id="fn-1" style="font-size: 1.2rem;"><i class="fas fa-long-arrow-alt-up"></i> <a href="#fnref-1" class="footnote">a</a>, <a href="#fnref-3" class="footnote">b</a> Footnotes can be a single line.</li>
-<li id="fn-bignote" style="font-size: 1.2rem;"><a href="#fnref-2" class="footnote"><i class="fas fa-long-arrow-alt-up"></i></a><p style="display:inline; font-size: 1.2rem;"> Or more complex.</p>
-<p style="font-size: 1.2rem;">Indent paragraphs to include them
-in the footnote.</p>
-<p style="font-size: 1.2rem;">Add as many paragraphs as you like.</p></li>
+<li id="fn-1" style="font-size: 1.2rem;"><i class="fas fa-long-arrow-alt-up"></i> <a href="#fnref-1" class="footnote">a</a>, <a href="#fnref-3" class="footnote">b</a> {{ t.syntax_footnotes_single }}</li>
+<li id="fn-bignote" style="font-size: 1.2rem;"><a href="#fnref-2" class="footnote"><i class="fas fa-long-arrow-alt-up"></i></a><p style="display:inline; font-size: 1.2rem;"> {{ t.syntax_footnotes_complex }}</p>
+<p style="font-size: 1.2rem;">{{ t.syntax_footnotes_indent }}
+{{ t.syntax_footnotes_indent2 }}</p>
+<p style="font-size: 1.2rem;">{{ t.syntax_footnotes_add }}</p></li>
 <li id="fn-x-clacks-overhead" style="font-size: 1.2rem;"><a href="#" class="footnote"><i class="fas fa-long-arrow-alt-up"></i></a> GNU Terry Pratchett.</li>
 </ol>
 </section>
 </div>
 </div> {# row #}
 
-{{ heading("Abbreviations") }}
+{{ heading(t.syntax_section_abbreviations) }}
 
-Defining abbreviations allows tooltips to display when hovering on those abbreviations
+{{ t.syntax_abbreviations_desc }}
 
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre>
-The HTML specification is maintained by the W3C.
+{{ t.syntax_abbr_example }}
 *[HTML]: Hyper Text Markup Language
 *[W3C]: World Wide Web Consortium</pre></div>
 
 <div class="col-md-6 col-sm-12 p-5">
-<p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification
-is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p>
+<p>{{ t.syntax_abbr_example | replace('HTML', '<abbr title="Hyper Text Markup Language">HTML</abbr>') | replace('W3C', '<abbr title="World Wide Web Consortium">W3C</abbr>') | safe }}</p>
 </div>
 </div>
 
-{{ heading("Blocks") }}
+{{ heading(t.syntax_section_blocks) }}
 
-These special blocks are not part of the markdown standard, but
-are helpful for structuring content.
+{{ t.syntax_blocks_desc }}
 
-<h4>Fancy blocks</h4>
+<h4>{{ t.syntax_blocks_fancy_title }}</h4>
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
 ::: info
-# Head of the block.
-With _formatted_ content.
+# {{ t.syntax_blocks_head }}
+{{ t.syntax_blocks_formatted }}
 :::
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 p-5">
-<div class="alert alert-primary mb-10"><h4 class="alert-heading">Head of the block</h4>
-With <em>formatted</em> content.</div>
+<div class="alert alert-primary mb-10"><h4 class="alert-heading">{{ t.syntax_blocks_head_rendered }}</h4>
+{{ t.syntax_blocks_formatted_rendered | safe }}</div>
 </div>
 </div> {# row #}
-Block styles available: <span class="alert alert-primary text-monospace" style="padding: 0.2rem">info</span>, <span class="alert alert-success text-monospace" style="padding: 0.2rem">success</span>, <span class="alert alert-secondary text-monospace" style="padding: 0.2rem">warning</span>, <span class="alert alert-danger text-monospace" style="padding: 0.2rem">danger</span> and <span class="alert text-monospace" style="padding: 0.2rem">none</span>.
+{{ t.syntax_blocks_block_styles }} <span class="alert alert-primary text-monospace" style="padding: 0.2rem">info</span>, <span class="alert alert-success text-monospace" style="padding: 0.2rem">success</span>, <span class="alert alert-secondary text-monospace" style="padding: 0.2rem">warning</span>, <span class="alert alert-danger text-monospace" style="padding: 0.2rem">danger</span> {{ t.syntax_and }} <span class="alert text-monospace" style="padding: 0.2rem">none</span>.
 
-<h4>Spoiler blocks</h4>
+<h4>{{ t.syntax_blocks_spoiler_title }}</h4>
 <div class="row my-20">
 <div class="col-md-6 col-sm-12">
 <pre class="block-compact">
-&gt;! Spoiler blocks reveal their
-&gt;! content on click on the icon.
+&gt;! {{ t.syntax_blocks_spoiler_line1 }}
+&gt;! {{ t.syntax_blocks_spoiler_line2 }}
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
@@ -399,41 +397,41 @@ Block styles available: <span class="alert alert-primary text-monospace" style="
 </div>
 </div>
 
-<h4>Folded blocks</h4>
+<h4>{{ t.syntax_blocks_folded_title }}</h4>
 <div class="row my-20 h-100">
 <div class="col-md-6 col-sm-12">
 <pre class="block-compact">
-&gt;| # Headline is used as summary
-&gt;| with the details folded.
+&gt;| # {{ t.syntax_blocks_folded_summary }}
+&gt;| {{ t.syntax_blocks_folded_detail }}
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 pl-5">
 <details class="collapse-panel">
 <summary class="collapse-header">
-Headline is used as summary
+{{ t.syntax_blocks_folded_summary }}
 </summary>
-<div class="collapse-content"><p>with the details folded.</p></div></details>
+<div class="collapse-content"><p>{{ t.syntax_blocks_folded_detail }}</p></div></details>
 </div>
 </div>
 
-<h4>Alerts</h4>
+<h4>{{ t.syntax_blocks_alerts_title }}</h4>
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
 &gt; [!NOTE]
-&gt; Useful for highlighting special
-&gt; information.
+&gt; {{ t.syntax_blocks_alert_line1 }}
+&gt; {{ t.syntax_blocks_alert_line2 }}
 </pre>
 </div>
 <div class="col-md-6 col-sm-12 p-5">
-<div class="quote-alert quote-alert-note" style="margin:0;"><div class="quote-alert-header"><i class="fas fa-info-circle"></i> Note</div><p>Useful for highlighting special information.</p></div>
+<div class="quote-alert quote-alert-note" style="margin:0;"><div class="quote-alert-header"><i class="fas fa-info-circle"></i> {{ t.syntax_blocks_alert_note }}</div><p>{{ t.syntax_blocks_alert_line1 }} {{ t.syntax_blocks_alert_line2 }}</p></div>
 </div>
 </div> {# row #}
-Alerts available: <code>[!NOTE]</code>, <code>[!TIP]</code>, <code>[!IMPORTANT]</code>, <code>[!WARNING]</code> and <code>[!CAUTION]</code>.
+{{ t.syntax_blocks_alerts_available }} <code>[!NOTE]</code>, <code>[!TIP]</code>, <code>[!IMPORTANT]</code>, <code>[!WARNING]</code> {{ t.syntax_and }} <code>[!CAUTION]</code>.
 
-{{ heading("Diagrams") }}
+{{ heading(t.syntax_section_diagrams) }}
 
-Using <a href="https://mermaid.js.org/">Mermaid</a> you can create diagrams and visualizations in your wiki pages.
+{{ t.syntax_diagrams_desc }} <a href="https://mermaid.js.org/">Mermaid</a> {{ t.syntax_diagrams_desc2 }}
 <div class="row">
 <div class="col-md-6 col-sm-12 p-5">
 <pre class="block-compact">
@@ -456,11 +454,11 @@ flowchart LR
 </div>
 </div> {# row #}
 
-Mermaid support all kinds of diagrams: flowcharts, class diagrams, pie charts, mindmaps, etc. For more information see the <a href="https://mermaid.js.org/intro/syntax-reference.html">Mermaid Documentation</a>.
+{{ t.syntax_diagrams_more_info }} <a href="https://mermaid.js.org/intro/syntax-reference.html">{{ t.syntax_diagrams_more_info2 }}</a>.
 
-{{ heading("Remark") }}
-There's actually a lot more to Markdown than this. See the official
-<a href="http://daringfireball.net/projects/markdown/basics">introduction</a> and
-<a href="http://daringfireball.net/projects/markdown/syntax">syntax</a> for more information.
+{{ heading(t.syntax_section_remark) }}
+{{ t.syntax_remark_desc }}
+<a href="http://daringfireball.net/projects/markdown/basics">{{ t.syntax_remark_introduction }}</a> {{ t.syntax_and }}
+<a href="http://daringfireball.net/projects/markdown/syntax">{{ t.syntax_remark_syntax }}</a> {{ t.syntax_remark_desc2 }}
 
-Please Note: An Otter Wiki is not using the official implementation. This might lead to small differences in the little things.
+{{ t.syntax_remark_note }}

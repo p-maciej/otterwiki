@@ -10,7 +10,7 @@
                     <span class="sidebar-icon">
                         <i class="fas fa-home"></i>
                     </span>
-                    Home
+                    {{ t.nav_home }}
                 </a>
 {% endif %}
 {% if has_permission('READ') and "pageindex" in config.SIDEBAR_SHORTCUTS.lower().split() %}
@@ -18,7 +18,7 @@
                     <span class="sidebar-icon">
                         <i class="fas fa-list"></i>
                     </span>
-                    A - Z
+                    {{ t.nav_page_index }}
                 </a>
 {% endif %}
 {% if has_permission('READ') and "changelog" in config.SIDEBAR_SHORTCUTS.lower().split() %}
@@ -26,7 +26,7 @@
                     <span class="sidebar-icon">
                         <i class="fas fa-history"></i>
                     </span>
-                    Changelog
+                    {{ t.nav_changelog }}
                 </a>
 {% endif %}
 {% if has_permission('WRITE') and "createpage" in config.SIDEBAR_SHORTCUTS.lower().split() %}
@@ -34,7 +34,7 @@
                     <span class="sidebar-icon">
                         <i class="far fa-file"></i>
                     </span>
-                    Create page
+                    {{ t.nav_create_page }}
                 </a>
 {% endif %}
 {%- if config.SIDEBAR_SHORTCUTS.split()|length > 0 %}
@@ -51,7 +51,7 @@
                         <span class="dropdown-icon">
                             <i class="far fa-file"></i>
                         </span>
-                    Create page
+                    {{ t.nav_create_page }}
                     </a>
 {% endif %}
 {% if has_permission('READ') and not "pageindex" in config.SIDEBAR_SHORTCUTS.lower().split() %}
@@ -59,7 +59,7 @@
                         <span class="dropdown-icon">
                             <i class="fas fa-list"></i>
                         </span>
-                    A - Z
+                    {{ t.nav_page_index }}
                     </a>
 {% endif %}
 {% if has_permission('READ') and not "changelog" in config.SIDEBAR_SHORTCUTS.lower().split() %}
@@ -67,14 +67,14 @@
                         <span class="dropdown-icon">
                             <i class="fas fa-history"></i>
                         </span>
-                    Changelog
+                    {{ t.nav_changelog }}
                     </a>
 {% endif %}
                     <a href="{{ url_for("help") }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-question-circle"></i>
                         </span>
-                    Documentation
+                    {{ t.nav_documentation }}
                     </a>
 {{ super() }}
 {% endblock %}

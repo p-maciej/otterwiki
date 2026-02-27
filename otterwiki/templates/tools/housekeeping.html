@@ -1,14 +1,14 @@
 {# vim: set et ts=8 sts=4 sw=4 ai ft=jinja.html: #}
 {% extends "settings.html" %}
 {% block content %}
-<h2 id="settings">Housekeeping</h2>
+<h2 id="settings">{{ t.housekeeping_title }}</h2>
 <div class="card m-auto m-lg-20">
 <div class="mw-full">
-<h3 class="card-title">Drafts</h3>
+<h3 class="card-title">{{ t.housekeeping_drafts_title }}</h3>
 {% if drafts %}
 <form action="{{ url_for("housekeeping") }}" method="POST" autocomplete="off">
 <input type="hidden" name="task" value="drafts">
-<p>This is the list of your drafts in the wiki. You can review each one or delete any you no longer need.
+<p>{{ t.housekeeping_drafts_desc }}
 <div class="table-responsive table-striped">
 <table class="table compact">
     <thead>
@@ -19,10 +19,10 @@
                   <label for="checkbox-a-all" onclick="otterwiki.toggle_invert_by_name('delete_draft');"></label>
                 </div>
             </td>
-            <td><strong>Page</strong></td>
-            <td><strong>Draft created</strong></td>
-            <td><strong>Revision</strong></td>
-            <td><strong>Page last changed</strong></td>
+            <td><strong>{{ t.housekeeping_col_page }}</strong></td>
+            <td><strong>{{ t.housekeeping_col_draft_created }}</strong></td>
+            <td><strong>{{ t.housekeeping_col_revision }}</strong></td>
+            <td><strong>{{ t.housekeeping_col_page_last_changed }}</strong></td>
         </tr>
     </thead>
     <tbody>
@@ -61,11 +61,11 @@
 </table>
 </div>
 <div class="mt-10">
-    <input class="btn btn-danger" type="submit" value="Delete selected drafts"/>
+    <input class="btn btn-danger" type="submit" value="{{ t.housekeeping_delete_selected_btn }}"/>
 </div>
 </form>
 {% else %}
-<p><em>No drafts found.</em></p>
+<p><em>{{ t.housekeeping_no_drafts }}</em></p>
 {% endif %}
 </div>
 </div>
@@ -73,14 +73,14 @@
 {% if has_permission("WRITE") %}
 <div class="card m-auto m-lg-20">
 <div class="mw-full">
-<h3 class="card-title">Empty Pages</h3>
+<h3 class="card-title">{{ t.housekeeping_empty_pages_title }}</h3>
 {% include 'tools/housekeeping_emptypages.html' %}
 </div>
 </div>
 {#-#}
 <div class="card m-auto m-lg-20">
 <div class="mw-full">
-<h3 class="card-title">Broken WikiLinks</h3>
+<h3 class="card-title">{{ t.housekeeping_broken_wikilinks_title }}</h3>
 {% include 'tools/housekeeping_brokenwikilinks.html' %}
 </div>
 </div>

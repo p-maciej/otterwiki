@@ -34,6 +34,7 @@ from otterwiki.helper import (
 )
 from otterwiki.version import __version__
 from otterwiki.util import sanitize_pagename
+from otterwiki.translations import get_locale
 
 from flask_login import login_required
 
@@ -307,15 +308,15 @@ def create():
         # This is the default create page view
         return render_template(
             "create.html",
-            title="Create Page",
+            title=get_locale("page_title_create"),
             pagename_prefixes=get_pagename_prefixes(),
         )
     elif pagename != pagename_sanitized:
         if pagename is not None and pagename != pagename_sanitized:
-            toast("Please check the pagename ...", "warning")
+            toast(get_locale("toast_check_pagename"), "warning")
         return render_template(
             "create.html",
-            title="Create Page",
+            title=get_locale("page_title_create"),
             pagename=pagename_sanitized,
             pagename_prefixes=get_pagename_prefixes(),
         )

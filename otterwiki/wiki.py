@@ -48,6 +48,7 @@ from otterwiki.models import Drafts
 from otterwiki.plugins import chain_hooks
 from otterwiki.renderer import pygments_render
 from otterwiki.server import app, app_renderer, db, storage
+from otterwiki.translations import get_locale
 from otterwiki.sidebar import SidebarMenu, SidebarPageIndex
 from otterwiki.pageindex import PageIndex
 from otterwiki.util import (
@@ -185,7 +186,7 @@ class Changelog:
         return render_template(
             "changelog.html",
             log=log,
-            title="Changelog",
+            title=get_locale("page_title_changelog"),
             pages=pages,
             first_page=first_page,
             last_page=last_page,
@@ -202,19 +203,19 @@ class Changelog:
             "revert.html",
             revision=revision,
             message=message,
-            title="Revert commit [{}]".format(revision),
+            title=get_locale("page_title_revert").format(revision=revision),
         )
 
     def revert(self, revision, message, author):
         if not has_permission("WRITE"):
             abort(403)
-        toast_message = "Reverted commit {}.".format(revision)
+        toast_message = get_locale("toast_reverted_commit").format(revision=revision)
         if empty(message):
             message = toast_message
         try:
             storage.revert(revision, message=message, author=author)
         except StorageError as e:
-            toast("Error: Unable to revert {}.".format(revision), "error")
+            toast(get_locale("toast_revert_error").format(revision=revision), "error")
             app.logger.error(f"Unable to revert {revision}: {e}")
         else:
             toast(toast_message)
@@ -244,7 +245,7 @@ class Changelog:
         file_diffs = patchset2filedict(patchset)
         return render_template(
             "diff.html",
-            title="commit {}".format(revision),
+            title=get_locale("page_title_commit").format(revision=revision),
             metadata=metadata,
             url_map=url_map,
             file_diffs=file_diffs,
@@ -479,17 +480,11 @@ class Page:
         # handle permissions
         if not has_permission("READ"):
             if current_user.is_authenticated and not current_user.is_approved:
-                toast(
-                    "You lack the permissions to access this wiki. Please wait for approval."
-                )
+                toast(get_locale("toast_no_read_permission_wait"))
             elif current_user.is_authenticated and current_user.is_approved:
-                toast(
-                    "You are logged in but lack READ permissions. Please wait for an administrator to grant access."
-                )
+                toast(get_locale("toast_no_read_permission_admin"))
             else:
-                toast(
-                    "You lack the permissions to access this wiki. Please login."
-                )
+                toast(get_locale("toast_no_read_permission_login"))
             return redirect(url_for("login"))
         # handle case that page doesn't exists
         self.exists_or_404()
@@ -499,8 +494,8 @@ class Page:
         danger_alert = False
         if not self.metadata:
             danger_alert = [
-                "Not under version control",
-                f"""This page was loaded from the repository but is not added under git version control. Make a commit on the <a href="/{self.pagepath}/edit" class="alert-link">Edit page</a> to add it.""",
+                get_locale("danger_alert_not_versioned_title"),
+                get_locale("danger_alert_not_versioned_body").format(pagepath=self.pagepath),
             ]
 
         # render markdown
@@ -743,9 +738,9 @@ class Page:
             author=author,
         )
         if not changed:
-            toast("Nothing changed.", "warning")
+            toast(get_locale("toast_nothing_changed"), "warning")
         else:
-            toast("{} saved.".format(self.pagename_full))
+            toast(get_locale("toast_page_saved").format(pagename=self.pagename_full))
         # take care of drafts
         self.discard_draft(author)
         # redirect to view
@@ -756,7 +751,7 @@ class Page:
             abort(403)
 
         if self.exists:
-            toast("{} exists already.".format(self.pagename), "warning")
+            toast(get_locale("toast_page_exists").format(pagename=self.pagename), "warning")
 
         return redirect(url_for("edit", path=self.pagepath))
 
@@ -815,7 +810,7 @@ class Page:
         menutree = SidebarPageIndex(get_page_directoryname(self.pagepath))
         return render_template(
             "blame.html",
-            title="{} - blame {}".format(self.pagename, self.revision),
+            title=get_locale("page_title_blame").format(pagename=self.pagename, revision=self.revision),
             pagepath=self.pagepath,
             pagename=self.pagename,
             blame=fdata,
@@ -840,7 +835,7 @@ class Page:
         menutree = SidebarPageIndex(get_page_directoryname(self.pagepath))
         return render_template(
             "diff.html",
-            title="{} - diff {} {}".format(self.pagename, rev_a, rev_b),
+            title=get_locale("page_title_diff").format(pagename=self.pagename, rev_a=rev_a, rev_b=rev_b),
             pagepath=self.pagepath,
             pagename=self.pagename,
             page_filename=self.filename,
@@ -886,7 +881,7 @@ class Page:
         menutree = SidebarPageIndex(get_page_directoryname(self.pagepath))
         return render_template(
             "history.html",
-            title="{} - History".format(self.pagename),
+            title=get_locale("page_title_history").format(pagename=self.pagename),
             pagename=self.pagename,
             pagepath=self.pagepath,
             log=log,
@@ -934,22 +929,18 @@ class Page:
         if not has_permission("WRITE"):
             abort(403)
         if empty(new_pagename):
-            toast("Please provide a name.", "error")
+            toast(get_locale("toast_provide_name"), "error")
         elif sanitize_pagename(new_pagename) != new_pagename:
-            toast("Please check the pagename ...", "warning")
+            toast(get_locale("toast_check_pagename"), "warning")
             new_pagename = sanitize_pagename(new_pagename)
         elif get_pagename(new_pagename, full=True) == self.pagepath:
-            toast("New and old name are the same.", "error")
+            toast(get_locale("toast_same_name"), "error")
         elif Page(new_pagename).exists:
-            toast(
-                f"Unable to rename: {new_pagename} already exists.", "warning"
-            )
+            toast(get_locale("toast_rename_exists").format(pagename=new_pagename), "warning")
         else:
             # rename
             if empty(message):
-                message = "Renamed {} to {}.".format(
-                    self.pagename, new_pagename
-                )
+                message = get_locale("commit_renamed").format(pagename=self.pagename, new_pagename=new_pagename)
             try:
                 self.rename(new_pagename, message, author)
             except Exception as e:
@@ -958,7 +949,7 @@ class Page:
                 # https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/
                 #   "Note that browsers and sometimes web servers enforce a limit on cookie sizes. This means that
                 #    flashing messages that are too large for session cookies causes message flashing to fail silently."
-                toast("Renaming failed.", "error")
+                toast(get_locale("toast_renaming_failed"), "error")
                 app.logger.error(f"Renaming failed: {e}")
             else:
                 return redirect(url_for("view", path=new_pagename))
@@ -978,7 +969,7 @@ class Page:
 
         return render_template(
             "rename.html",
-            title="Rename {}".format(self.pagename),
+            title=get_locale("page_title_rename").format(pagename=self.pagename),
             pagepath=self.pagepath,
             pagename=get_pagename(self.pagepath, full=True),
             new_pagename=new_pagename,
@@ -996,21 +987,21 @@ class Page:
         if not has_permission("WRITE"):
             abort(403)
         if empty(message):
-            message = "{} deleted.".format(self.pagename)
+            message = get_locale("commit_deleted").format(pagename=self.pagename)
         files = []
         if self.exists:
             files.append(self.filename)
         if recursive:
             files.append(self.attachment_directoryname)
         if len(files) < 1:
-            toast("Nothing to delete.")
+            toast(get_locale("toast_nothing_to_delete"))
             return redirect(url_for("view", path=self.pagepath))
         storage.delete(
             files,
             message=message,
             author=author,
         )
-        toast("{} deleted.".format(self.pagename))
+        toast(get_locale("toast_page_deleted").format(pagename=self.pagename))
         return redirect(url_for("changelog"))
 
     def delete_form(self):
@@ -1019,11 +1010,9 @@ class Page:
         # count attachments and subpages
         files, _ = storage.list(self.attachment_directoryname)
         if len(files) > 0:
-            title = "Delete {} and the {} file(s) attached?".format(
-                self.pagename, len(files)
-            )
+            title = get_locale("page_title_delete_with_files").format(pagename=self.pagename, count=len(files))
         else:
-            title = "Delete {} ?".format(self.pagename)
+            title = get_locale("page_title_delete").format(pagename=self.pagename)
         return render_template(
             "delete.html",
             title=title,
@@ -1059,7 +1048,7 @@ class Page:
         files = self._attachments_list()
         return render_template(
             "attachments.html",
-            title="{} - Attachments".format(self.pagename),
+            title=get_locale("page_title_attachments").format(pagename=self.pagename),
             pagepath=self.pagepath,
             pagename=self.pagename,
             files=files,
@@ -1090,12 +1079,12 @@ class Page:
             last_uploaded_filename = fn
         if len(to_commit) > 0:
             if filename is None:
-                toastmsg = "Added attachment(s): {}.".format(
-                    ", ".join([c.filename for c in to_commit])
+                toastmsg = get_locale("toast_added_attachments").format(
+                    filenames=", ".join([c.filename for c in to_commit])
                 )
             else:
-                toastmsg = "Updated attachment: {}.".format(
-                    ", ".join([c.filename for c in to_commit])
+                toastmsg = get_locale("toast_updated_attachment").format(
+                    filenames=", ".join([c.filename for c in to_commit])
                 )
             # default message
             if empty(message):
@@ -1321,7 +1310,7 @@ class Attachment:
     def rename(self, new_filename, message, author):
         if not has_permission("UPLOAD"):
             abort(403)
-        toast_message = "Renamed {} to {}".format(self.filename, new_filename)
+        toast_message = get_locale("toast_attachment_renamed").format(filename=self.filename, new_filename=new_filename)
         new_filepath = os.path.join(self.directory, new_filename)
         if empty(message):
             message = toast_message
@@ -1330,7 +1319,7 @@ class Attachment:
                 self.filepath, new_filepath, message=message, author=author
             )
         except StorageError:
-            toast("Renaming failed", "error")
+            toast(get_locale("toast_attachment_renaming_failed"), "error")
             return redirect(url_for("attachments", pagepath=self.pagepath))
         toast(toast_message)
         return redirect(
@@ -1344,14 +1333,14 @@ class Attachment:
     def delete(self, message, author):
         if not has_permission("WRITE"):
             abort(403)
-        toast_message = "Deleted {}".format(self.filename)
+        toast_message = get_locale("toast_attachment_deleted").format(filename=self.filename)
         if empty(message):
             message = toast_message
         try:
             storage.delete(self.filepath, message=message, author=author)
             toast(toast_message)
         except StorageError:
-            toast("Deleting failed", "error")
+            toast(get_locale("toast_attachment_deleting_failed"), "error")
         return redirect(url_for("attachments", pagepath=self.pagepath))
 
     def edit(self):
@@ -1524,7 +1513,7 @@ class Search:
                 self.re = re.compile(self.needle, re.IGNORECASE)
             self.rei = re.compile(self.needle, re.IGNORECASE)
         except Exception as e:
-            toast("Error in search term: {}".format(e), "error")
+            toast(get_locale("toast_search_error").format(error=e), "error")
             return
 
     def search(self):

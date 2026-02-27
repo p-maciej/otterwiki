@@ -9,17 +9,17 @@
   <meta name="viewport" content="width=device-width" />
 {# meta preview block [[ #}
 {%if title%}
-  <meta property="og:site_name" content="{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}An Otter Wiki{%endif%}" />
+  <meta property="og:site_name" content="{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}{{ t.layout_default_site_name }}{%endif%}" />
 {% endif %}
-  <meta property="og:title" content="{%if title%}{{title}}{%elif config.SITE_NAME %}{{config.SITE_NAME}}{%else%}An Otter Wiki{%endif%}" />
+  <meta property="og:title" content="{%if title%}{{title}}{%elif config.SITE_NAME %}{{config.SITE_NAME}}{%else%}{{ t.layout_default_site_name }}{%endif%}" />
   <meta property="og:type" content="website" />
 {%- if pagepath %}
   <meta property="og:url" content="{{ url_for('view', path=pagepath, _external=True) }}" />
 {%- else %}
   <meta property="og:url" content="{{ url_for("index", _external=True) }}" />
 {%- endif %}
-  <meta property="og:description" content="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}A minimalistic wiki powered by python, markdown and git.{%endif%}" />
-  <meta name="description" content="{%if config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}A minimalistic wiki powered by python, markdown and git.{%endif%}" />
+  <meta property="og:description" content="{%if description%}{{description}}{%elif config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}{{ t.layout_default_description }}{%endif%}" />
+  <meta name="description" content="{%if config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}{{ t.layout_default_description }}{%endif%}" />
 {%- if canonical_url %}
   <link rel="canonical" href="{{ canonical_url }}" />
 {%- endif %}
@@ -37,7 +37,7 @@
   <meta property="og:image" content="{{ url_for("static", filename="img/otterhead.png", _external=True) }}" />
   <meta property="og:image:width" content="200" />
   <meta property="og:image:height" content="144" />
-  <meta property="og:image:alt" content="An Otter Wiki Logo" />
+  <meta property="og:image:alt" content="{{ t.layout_default_site_name }} Logo" />
 {%- endif %}
 {# meta preview block ]] #}
   <!-- Favicon and title -->
@@ -47,7 +47,7 @@
     <link rel="icon" href="{{ url_for("static", filename="img/otter-favicon2.png") }}">
 {%- endif %}
 {% block title %}
-    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}An Otter Wiki{%endif%}</title>
+    <title>{%if title%}{{title}} &ndash; {%endif%}{%if config.SITE_NAME %}{{config.SITE_NAME}}{%else%}{{ t.layout_default_site_name }}{%endif%}</title>
 {% endblock %}
     <link href="{{ url_for("static", filename="css/halfmoon.min.css") | debug_unixtime }}" rel="stylesheet" media="screen" />
     <!-- Otterwiki CSS -->
@@ -106,7 +106,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-            <a href="{{ url_for("index") }}" class="navbar-brand ml-10 ml-sm-20" title="{%if config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}A minimalistic wiki powered by python, markdown and git.{%endif%}">
+            <a href="{{ url_for("index") }}" class="navbar-brand ml-10 ml-sm-20" title="{%if config.SITE_DESCRIPTION %}{{config.SITE_DESCRIPTION}}{%else%}{{ t.layout_default_description }}{%endif%}">
 {%- if config.SITE_LOGO %}
                 <img src="{{ config.SITE_LOGO }}" alt="" id="site_logo"/>
 {%- else %}
@@ -120,7 +120,7 @@
 {% block navbarsearch %}
                 <form action="{{ url_for("search") }}" method="post" class="relative">
                 <span class="top-search">
-                <input id="search-query" name="query" type="text" class="form-control mr-5" placeholder="Search" style="padding-right: 3.5rem;">
+                <input id="search-query" name="query" type="text" class="form-control mr-5" placeholder="{{ t.nav_search_placeholder }}" style="padding-right: 3.5rem;">
                 </span>
                 </form>
 {% endblock %}
@@ -137,7 +137,7 @@
                         <span class="dropdown-icon">
                             <img width="26" src="{{ url_for("static", filename="img/otterhead.png") }}" >
                         </span>
-                        About An Otter Wiki
+                        {{ t.nav_about }}
                     </a>
 {% endif %}
 {% if has_permission('READ') %}
@@ -147,7 +147,7 @@
                         <span class="dropdown-icon">
                             <i class="far fa-moon"></i>
                         </span>
-                        Toggle dark mode
+                        {{ t.nav_toggle_dark_mode }}
                     </a>
 
 {% if not current_user.is_authenticated %}
@@ -155,21 +155,21 @@
                         <span class="dropdown-icon">
                             <i class="fas fa-sign-in-alt"></i>
                         </span>
-                        Login
+                        {{ t.nav_login }}
                     </a>
 {% else %}
                     <a href="{{ url_for("settings") }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-cog"></i>
                         </span>
-                        Settings
+                        {{ t.nav_settings }}
                     </a>
   {% if auth_supported_features['logout'] %}
                     <a href="{{ url_for("logout") }}"  class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-sign-out-alt"></i>
                         </span>
-                        Logout
+                        {{ t.nav_logout }}
                     </a>
   {% endif %}
 {% endif %}
@@ -200,7 +200,7 @@
             <div class="sidebar-otter" >
                 <a href=" {{ url_for("about") }}" class="sidebar-link">
                 <img class="sidebar-logo" src="{{ url_for("static", filename="img/otter.png") | debug_unixtime }}" alt=""/><br/>
-                An Otter Wiki
+                {{ t.sidebar_an_otter_wiki }}
                 </a>
             </div>
             {% endif %}

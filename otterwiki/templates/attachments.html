@@ -7,7 +7,7 @@
 {% block extra_nav %}{% endblock %}
 {% block content %}
 <div class="w-full mw-full p-0 clearfix">
-    <h2 class="float-left">Attachments</h2>
+    <h2 class="float-left">{{ t.attachments_title }}</h2>
 </div>
 {# upload form #}
 {% if has_permission("UPLOAD") %}
@@ -15,13 +15,13 @@
   <form action="{{ url_for("attachments" , pagepath=pagepath) }}" method="POST" class="form-inline" enctype=multipart/form-data>
   <div class="custom-file">
     <input name="file" type="file" id="file-upload" multiple="multiple">
-    <label for="file-upload">Choose files to upload</label>
+    <label for="file-upload">{{ t.attachments_choose_files }}</label>
   </div>
   <div class="form-group">
-      <input type="text" class="form-control" name="message" id="message" placeholder="Commit message" value="{{message}}">
+      <input type="text" class="form-control" name="message" id="message" placeholder="{{ t.attachments_commit_placeholder }}" value="{{message}}">
   </div>
   <div class="form-group m-0">
-    <input class="btn btn-primary" type="submit" value="Upload">
+    <input class="btn btn-primary" type="submit" value="{{ t.attachments_upload_btn }}">
   </div>
   </form>
 </div>
@@ -32,12 +32,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Thumbail</th>
-          <th>Filename</th>
-          <th>Size</th>
-          <th>Date</th>
-          <th>Author</th>
-          <th class="w-half">Comment</th>
+          <th>{{ t.attachments_col_thumbnail }}</th>
+          <th>{{ t.attachments_col_filename }}</th>
+          <th>{{ t.attachments_col_size }}</th>
+          <th>{{ t.attachments_col_date }}</th>
+          <th>{{ t.attachments_col_author }}</th>
+          <th class="w-half">{{ t.attachments_col_comment }}</th>
 {% if has_permission("READ") %}
           <th></th>
 {% endif %}

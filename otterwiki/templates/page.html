@@ -24,26 +24,26 @@
                         <span class="dropdown-icon">
                             <i class="fa fa-paperclip"></i>
                         </span>
-                        Attachments
+                        {{ t.page_attachments }}
                     </a>
                     <a href="{{ url_for('history', path=pagepath) }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="far fa-file-alt"></i>
                         </span>
-                        History
+                        {{ t.page_history }}
                     </a>
                     <a href="{{ url_for('blame', path=pagepath, revision=resivion) if revision else url_for('blame', path=pagepath) }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fas fa-people-arrows"></i>
                         </span>
-                        Blame
+                        {{ t.page_blame }}
                     </a>
 {% if has_permission('READ') and not has_permission('WRITE') %}
                     <a href="{{ url_for('source', pagepath=pagepath) }}" class="dropdown-item-with-icon">
                         <span class="dropdown-icon">
                             <i class="fab fa-markdown"></i>
                         </span>
-                        View Source
+                        {{ t.page_view_source }}
                     </a>
 {% endif %}
 {% include 'snippets/navbardropdown_rename_remove.html' %}

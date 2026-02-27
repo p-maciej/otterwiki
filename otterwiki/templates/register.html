@@ -3,25 +3,25 @@
 {% block formcontent %}
 <form action="{{ url_for("register") }}" method="POST" class="form-inline">{# <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
   <div class="form-group">
-    <label for="email" class="required w-150">eMail Address</label>
-    <input type="text" class="form-control" name="email" id="email" placeholder="you@example.com" value="{{email if email}}" autofocus>
+    <label for="email" class="required w-150">{{ t.register_email_label }}</label>
+    <input type="text" class="form-control" name="email" id="email" placeholder="{{ t.register_email_placeholder }}" value="{{email if email}}" autofocus>
   </div>
   <div class="form-group">
-    <label for="password1" class="required w-150">Password</label>
-    <input type="password" class="form-control" name="password1" id="password1" placeholder="Password">
+    <label for="password1" class="required w-150">{{ t.register_password_label }}</label>
+    <input type="password" class="form-control" name="password1" id="password1" placeholder="{{ t.register_password_placeholder }}">
   </div>
   <div class="form-group">
-    <label for="password2" class="required w-150">Confirm password</label>
-    <input type="password" class="form-control" name="password2" id="password2" placeholder="Confirm Password">
+    <label for="password2" class="required w-150">{{ t.register_confirm_password_label }}</label>
+    <input type="password" class="form-control" name="password2" id="password2" placeholder="{{ t.register_confirm_password_placeholder }}">
   </div>
   <div class="form-group">
-      The password must be at least 8 characters long.
+      {{ t.register_password_hint }}
   </div>
   <div class="form-group">
-    <label for="name" class="required w-150">Name</label>
-    <input type="text" class="form-control" name="name" id="name" placeholder="First and Last name" value="{{name if name}}">
+    <label for="name" class="required w-150">{{ t.register_name_label }}</label>
+    <input type="text" class="form-control" name="name" id="name" placeholder="{{ t.register_name_placeholder }}" value="{{name if name}}">
   </div>
-  <input class="btn btn-primary" type="submit" value="Register">
-  <a href="{{ url_for("login") }}" class="btn btn-link" role="button">Login</a>
+  <input class="btn btn-primary" type="submit" value="{{ t.register_submit }}">
+  <a href="{{ url_for("login") }}" class="btn btn-link" role="button">{{ t.register_login_link }}</a>
 </form>
 {% endblock %}

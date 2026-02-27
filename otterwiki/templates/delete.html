@@ -3,19 +3,19 @@
 {% block formcontent %}
 <form action="{{url_for("delete", path=pagepath )}}" method="POST" class="form-inline">
   <div class="form-group">
-    <label for="message" class="w-150">Commit message</label>
+    <label for="message" class="w-150">{{ t.delete_commit_label }}</label>
     <input type="text" class="form-control" name="message" id="message" placeholder="Deleted {{pagename}}." value="{{message}}">
   </div>
   <div class="custom-checkbox">
       <input type="checkbox" id="delete-attachments" name="recursive" value="recursive" checked>
-      <label for="delete-attachments">Recursive remove all attached files and folders</label>
+      <label for="delete-attachments">{{ t.delete_recursive_label }}</label>
   </div>
   <div class="form-group mt-10">
-      <input class="btn btn-danger" type="submit" value="Delete">
-      <a href="{{ url_for("view", path=pagepath) }}" class="btn" role="button">Cancel</a>
+      <input class="btn btn-danger" type="submit" value="{{ t.delete_submit }}">
+      <a href="{{ url_for("view", path=pagepath) }}" class="btn" role="button">{{ t.delete_cancel }}</a>
   </div>
   <div class="form-text">
-      <em>Note: Reverting a delete will restore the deleted file(s).</em>
+      <em>{{ t.delete_note }}</em>
   </div>
 </form>
 {% endblock %}

@@ -9,61 +9,61 @@
 {% set temp = namespace(ownold=false, ownnew=false, others=false) %}
     <div class="invalid-feedback">
 {% if olddrafts %}
-        There are drafts saved for <strong>{{pagename}}</strong>:
+        {{ t.rename_drafts_saved_for_page.format(pagename=pagename)|safe }}
       <ul class="mt-10">
 {% for draft in olddrafts -%}
 <li>
 {%if current_user.email == draft.author_email%}
-    Your draft
+    {{ t.rename_your_draft }}
 {% set temp.ownold = True %}
 {%else%}
     {{draft.author_email}}'s draft
 {% set temp.others = True %}
 {%endif%}
- last updated on <span title="{{draft.datetime|format_datetime("deltanow")}} ago">{{draft.datetime|format_datetime}}</span></li>
+ {{ t.rename_last_updated }} <span title="{{draft.datetime|format_datetime("deltanow")}} ago">{{draft.datetime|format_datetime}}</span></li>
 {% endfor -%}
       </ul>
 {%endif%}
 {% if newdrafts %}
-        There are drafts saved for <strong>{{new_pagename}}</strong>:
+        {{ t.rename_drafts_saved_for_page.format(pagename=new_pagename)|safe }}
       <ul class="mt-10">
 {% for draft in newdrafts -%}
 <li>
 {%if current_user.email == draft.author_email%}
-    Your draft
+    {{ t.rename_your_draft }}
 {% set temp.ownnew = True %}
 {%else%}
     {{draft.author_email}}'s draft
 {% set temp.others = True %}
 {%endif%}
- last updated on <span title="{{draft.datetime|format_datetime("deltanow")}} ago">{{draft.datetime|format_datetime}}</span></li>
+ {{ t.rename_last_updated }} <span title="{{draft.datetime|format_datetime("deltanow")}} ago">{{draft.datetime|format_datetime}}</span></li>
 {% endfor -%}
       </ul>
 {%endif%}
       {% if temp.ownnew or temp.ownold %}
-      You can review and edit or discard your draft{%if temp.ownold and temp.ownnew %}s {%endif%}
+      {{ t.rename_review_draft }}{%if temp.ownold and temp.ownnew %}s {%endif%}
       {%if temp.ownold%} for <strong>{{pagepath}}</strong> <a class="hyperlink-underline text-danger" href="{{ url_for("edit", path=pagepath) }}">here</a>{%endif%}
       {%- if temp.ownold and temp.ownnew %} and {%endif%}
       {%- if temp.ownnew%} <strong>{{new_pagename}}</strong> <a class="hyperlink-underline text-danger" href="{{ url_for("edit", path=new_pagename) }}">here</a>{%endif%}.
       {% endif %}
       {% if temp.others %}
-      You can not review, edit or discard the drafts of other users. They will persist for the current pagename.
+      {{ t.rename_others_draft }}
       {% endif %}
     </div>
 {% endif %}
 <form action="{{ url_for("rename", path=pagepath) }}" method="POST" class="form-inline">
   <div class="form-group">
-    <label for="new_pagename" class="required w-150">New name</label>
+    <label for="new_pagename" class="required w-150">{{ t.rename_new_name_label }}</label>
     <input type="text" class="form-control" name="new_pagename" id="new_pagename" value="{{new_pagename if new_pagename else pagename}}" placeholder="{{pagename}}" autofocus="" onfocus="this.setSelectionRange(this.value.length,this.value.length);">
   </div>
   <div class="form-group">
-    <label for="message" class="w-150">Commit message</label>
-    <input type="text" class="form-control" name="message" id="message" placeholder="Renamed {{pagename}} to {{new_pagename if new_pagename else "..."}}" value="{{ message if message }}">
+    <label for="message" class="w-150">{{ t.rename_commit_label }}</label>
+    <input type="text" class="form-control" name="message" id="message" placeholder="{{ t.rename_commit_placeholder.format(pagename=pagename, new_pagename=new_pagename if new_pagename else '...') }}" value="{{ message if message }}">
   </div>
   {% if pagename_prefixes and pagename_prefixes|length > 0  %}
   <div class="form-group mb-5">
     <div class="w-100 mr-10">
-    Move page in subdirectory:
+    {{ t.rename_move_page_label }}
     </div>
     <div style="position: relative; -ms-flex: 1 1 0%; flex: 1 1 0%; min-width: 0;">
     {% for prefix in pagename_prefixes %}
@@ -74,10 +74,10 @@
   {% endif %}
   <div class="form-group">
     <div class="form-text text-wrap">
-        Hint: Avoid abbreviations. Try to limit your name to three simple words or fewer.
+        {{ t.rename_hint }}
     </div>
   </div>
-  <input class="btn btn-primary" type="submit" value="Rename">
-  <a href="{{ url_for("view", path=pagepath) }}" class="btn" role="button">Cancel</a>
+  <input class="btn btn-primary" type="submit" value="{{ t.rename_submit }}">
+  <a href="{{ url_for("view", path=pagepath) }}" class="btn" role="button">{{ t.rename_cancel }}</a>
 </form>
 {% endblock %}

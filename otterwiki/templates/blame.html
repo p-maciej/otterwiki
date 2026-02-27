@@ -7,7 +7,7 @@
 {% block extra_nav %}{% endblock %}
 {% block content %}
 <div class="w-full mw-full p-0 m-0 clearfix">
-    <h2>Blame {#{pagename}#}</h2>
+    <h2>{{ t.blame_title }} {#{pagename}#}</h2>
 </div>
 <table class="blame">
 {% for line in blame %}

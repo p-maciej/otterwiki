@@ -2,11 +2,11 @@
 <input type="hidden" name="task" value="emptypages">
 {% if stats and pages %}
 <div class="mb-20">
-<p> To keep your wiki clean, please review the following {{pages|length}} potentially empty page{{pages|length|pluralize("s")}}.
-{{stats.pages}} page{{stats.pages|pluralize("s")}} were checked in {{stats.duration}}.
+<p>{{ t.housekeeping_emptypages_review.format(count=pages|length) }}
+{{ t.housekeeping_emptypages_checked.format(count=stats.pages, duration=stats.duration) }}
 </p>
-<input class="btn btn-primary" type="submit" name="refresh" value="Refresh"/>
-<input class="btn btn-danger" type="submit" name="clean" value="Delete selected pages"/>
+<input class="btn btn-primary" type="submit" name="refresh" value="{{ t.housekeeping_emptypages_refresh_btn }}"/>
+<input class="btn btn-danger" type="submit" name="clean" value="{{ t.housekeeping_emptypages_delete_btn }}"/>
 <span id="emptypages_indicator" class="htmx-indicator"><i class="fas fa-spinner fa-spin"></i></span>
 </div>
 <div class="table-responsive table-striped">
@@ -19,8 +19,8 @@
                   <label for="checkbox-b-all" onclick="otterwiki.toggle_invert_by_name('delete_empty_page');"></label>
                 </div>
             </td>
-            <td style="width:1px;"><strong>Page</strong></td>
-            <td><strong>Analysis</strong></td>
+            <td style="width:1px;"><strong>{{ t.housekeeping_emptypages_col_page }}</strong></td>
+            <td><strong>{{ t.housekeeping_emptypages_col_analysis }}</strong></td>
             <td style="width:1px;text-align:right;">&nbsp;</td>
         </tr>
     </thead>
@@ -50,12 +50,12 @@
 </div>
 {% else %}
 {% if stats %}
-<p>No empty pages found. Checked {{stats.pages}} page{{stats.pages|pluralize("s")}} in {{stats.duration}}.</p>
+<p>{{ t.housekeeping_emptypages_none_found.format(count=stats.pages, duration=stats.duration) }}</p>
 {% else %}
-<p>To find potentially empty pages, start an analysis.</p>
+<p>{{ t.housekeeping_emptypages_start }}</p>
 {% endif %}
 <div>
-    <input class="btn btn-primary" type="submit" name="refresh" value="Analyse pages"/>
+    <input class="btn btn-primary" type="submit" name="refresh" value="{{ t.housekeeping_emptypages_analyse_btn }}"/>
     <span id="emptypages_indicator" class="htmx-indicator"><i class="fas fa-spinner fa-spin"></i></span>
 </div>
 {% endif %}

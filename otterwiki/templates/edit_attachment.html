@@ -2,7 +2,7 @@
 {% extends "page.html" %}
 {% block content %}
 <div class="w-full mw-full p-0 clearfix">
-    <h2 class="float-left">Edit <strong>{{filename}}</strong></h2>
+    <h2 class="float-left">{{ t.edit_attachment_title }} <strong>{{filename}}</strong></h2>
 </div>
 {# rename #}
 {% if has_permission("UPLOAD") %}
@@ -10,16 +10,16 @@
 <div class="card">
 <form action="{{ url_for("edit_attachment", pagepath=pagepath, filename=filename) }}" method="POST" class="form-inline">
   <div class="form-group">
-    <label for="new_filename" class="required w-150">New filename</label>
+    <label for="new_filename" class="required w-150">{{ t.edit_attachment_new_filename_label }}</label>
     <input type="text" class="form-control" name="new_filename" id="new_filename" placeholder="{{filename}}" value="{{new_filename if new_filename else filename}}">
   </div>
   <div class="form-group">
-    <label for="message" class="w-150">Commit message</label>
+    <label for="message" class="w-150">{{ t.edit_attachment_commit_label }}</label>
     <input type="text" class="form-control" name="message" id="message" placeholder="Renamed {{filename}} to {{new_filename if new_filename else "..."}}" value="{{ message if message }}">
   </div>
   <div class="form-group position-relative m-0">
-    <input class="btn btn-primary" type="submit" value="Rename">
-    <input class="btn btn-danger position-absolute right-0" type="submit" name="delete" value="Delete">
+    <input class="btn btn-primary" type="submit" value="{{ t.edit_attachment_rename_btn }}">
+    <input class="btn btn-danger position-absolute right-0" type="submit" name="delete" value="{{ t.edit_attachment_delete_btn }}">
   </div>
 </form>
 </div>{# card #}
@@ -29,13 +29,13 @@
       <input name="filename" type="hidden" value="{{filename}}">
   <div class="custom-file">
     <input name="file" type="file" id="file-upload" multiple="multiple">
-    <label for="file-upload">Choose files to upload</label>
+    <label for="file-upload">{{ t.edit_attachment_choose_files }}</label>
   </div>
   <div class="form-group">
-      <input type="text" class="form-control" name="message" id="message" placeholder="Commit message" value="{{message}}">
+      <input type="text" class="form-control" name="message" id="message" placeholder="{{ t.edit_attachment_commit_placeholder }}" value="{{message}}">
   </div>
   <div class="form-group m-0">
-    <input class="btn btn-primary" type="submit" value="Replace">
+    <input class="btn btn-primary" type="submit" value="{{ t.edit_attachment_replace_btn }}">
   </div>
   </form>
 </div>{# card #}
@@ -47,9 +47,9 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Author</th>
-            <th class="w-half">Comment</th>
+            <th>{{ t.edit_attachment_col_date }}</th>
+            <th>{{ t.edit_attachment_col_author }}</th>
+            <th class="w-half">{{ t.edit_attachment_col_comment }}</th>
           </tr>
         </thead>
         <tbody>
@@ -63,7 +63,7 @@
                                         revision=entry.revision,
                       ) }}" class="btn revision-small">{{entry.revision}}</a>
 {% if has_permission("UPLOAD") %}
-&nbsp;<a href="{{ url_for("revert", revision=entry.revision) }}"><i class="fas fa-undo" alt="revert" title="revert commit {{entry.revision}}"></i></a>
+&nbsp;<a href="{{ url_for("revert", revision=entry.revision) }}"><i class="fas fa-undo" alt="revert" title="{{ t.page_title_revert.format(revision=entry.revision) }}"></i></a>
 </td>
 {% endif %}
 {# author #}

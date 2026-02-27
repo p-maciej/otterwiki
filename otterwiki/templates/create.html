@@ -3,13 +3,13 @@
 {% block formcontent %}
 <form action="{{url_for("create")}}" method="POST" class="form-inline">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
   <div class="form-group mb-10">
-    <label for="pagename" class="required w-100">Page name</label>
-    <input type="text" class="form-control" name="pagename" id="pagename" placeholder="Page name" required="required" value="{{ pagename if pagename }}" autofocus>
+    <label for="pagename" class="required w-100">{{ t.create_page_name_label }}</label>
+    <input type="text" class="form-control" name="pagename" id="pagename" placeholder="{{ t.create_page_name_placeholder }}" required="required" value="{{ pagename if pagename }}" autofocus>
   </div>
   {% if pagename_prefixes and pagename_prefixes|length > 0  %}
   <div class="form-group mb-5">
     <div class="w-100 mr-10">
-    Create page in subdirectory:
+    {{ t.create_subdirectory_label }}
     </div>
     <div style="position: relative; -ms-flex: 1 1 0%; flex: 1 1 0%; min-width: 0;">
     {% for prefix in pagename_prefixes %}
@@ -20,9 +20,9 @@
   {% endif %}
   <div class="form-group">
     <div class="form-text text-wrap font-italic">
-        Hint: Avoid abbreviations. Try to limit your name to three simple words or fewer.
+        {{ t.create_hint }}
     </div>
   </div>
-  <input class="btn btn-primary" type="submit" value="Create and open in editor">
+  <input class="btn btn-primary" type="submit" value="{{ t.create_submit }}">
 </form>
 {% endblock %}

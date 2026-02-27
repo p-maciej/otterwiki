@@ -24,6 +24,7 @@ from otterwiki.helper import (
     get_pagename,
     get_pagename_for_title,
 )
+from otterwiki.translations import get_locale
 from otterwiki.util import empty, is_valid_email
 from flask_login import current_user
 from otterwiki.auth import (
@@ -54,9 +55,7 @@ def handle_mail_preferences(form):
     error = 0
     if not is_valid_email(form.get("mail_sender") or ""):
         toast(
-            "'{}' is not a valid email address.".format(
-                form.get("mail_sender")
-            ),
+            get_locale("toast_invalid_sender").format(sender=form.get("mail_sender")),
             "error",
         )
         error += 1
@@ -65,7 +64,7 @@ def handle_mail_preferences(form):
             "MAIL_DEFAULT_SENDER", form.get("mail_sender").strip()
         )
     if empty(form.get("mail_server")):
-        toast("Mail Server must not be empty.", "error")
+        toast(get_locale("toast_mail_server_empty"), "error")
         error += 1
     else:
         _update_preference("MAIL_SERVER", form.get("mail_server").strip())
@@ -77,7 +76,7 @@ def handle_mail_preferences(form):
         else:
             mail_port = ""
     except (ValueError, TypeError) as e:
-        toast("Mail port must be a valid port.", "error")
+        toast(get_locale("toast_mail_port_invalid"), "error")
         error += 1
     else:
         _update_preference("MAIL_PORT", mail_port)
@@ -96,7 +95,7 @@ def handle_mail_preferences(form):
         _update_preference("MAIL_USE_TLS", "False")
         _update_preference("MAIL_USE_SSL", "True")
     if error < 1:
-        toast("Mail Preferences updated.")
+        toast(get_locale("toast_mail_preferences_updated"))
 
     db.session.commit()
     update_app_config()
@@ -136,9 +135,7 @@ def handle_sidebar_preferences(form):
     _update_preference("SIDEBAR_SHORTCUTS", " ".join(sidebar_shortcuts))
 
     if not re.match(r"^(|\d+)$", form.get("sidebar_menutree_maxdepth", "")):
-        toast(
-            "Invalid value: SIDEBAR_MENUTREE_MAXDEPTH must be an integer or empty"
-        )
+        toast(get_locale("toast_sidebar_invalid_maxdepth"))
         return redirect(url_for("admin_sidebar_preferences"))
     else:
         _update_preference(
@@ -158,7 +155,7 @@ def handle_sidebar_preferences(form):
     # commit changes to the database
     db.session.commit()
     update_app_config()
-    toast("Sidebar Preferences updated.")
+    toast(get_locale("toast_sidebar_preferences_updated"))
     return redirect(url_for("admin_sidebar_preferences"))
 
 
@@ -179,11 +176,9 @@ def handle_app_preferences(form):
 
     home_page = form.get("home_page", "").strip()
     if home_page and home_page.endswith(".md"):
-        toast(
-            "Custom home page path should not include the .md extension.",
-            "error",
-        )
+        toast(get_locale("toast_home_page_no_md"), "error")
         return redirect(url_for("admin"))
+    _update_preference("HOME_PAGE", home_page)
 
     # handle server_name
     server_name = form.get("server_name", "").strip()
@@ -195,7 +190,7 @@ def handle_app_preferences(form):
     # commit changes to the database
     db.session.commit()
     update_app_config()
-    toast("Application Preferences updated.")
+    toast(get_locale("toast_app_preferences_updated"))
     return redirect(url_for("admin"))
 
 
@@ -214,7 +209,7 @@ def handle_content_and_editing(form):
     # commit changes to the database
     db.session.commit()
     update_app_config()
-    toast("Content and Editing Preferences updated.")
+    toast(get_locale("toast_content_editing_updated"))
     return redirect(url_for("admin_content_and_editing"))
 
 
@@ -246,10 +241,7 @@ def handle_repository_management(form):
             _update_preference("GIT_REMOTE_PUSH_ENABLED", "False")
             _update_preference("GIT_REMOTE_PUSH_PRIVATE_KEY", "")
             _update_preference("GIT_REMOTE_PUSH_URL", "")
-            toast(
-                "SSH Remote URL is required when enabling automatic pushing.",
-                "error",
-            )
+            toast(get_locale("toast_ssh_push_url_required"), "error")
         else:
             _update_preference("GIT_REMOTE_PUSH_ENABLED", "True")
             _update_preference("GIT_REMOTE_PUSH_URL", remote_url)
@@ -274,10 +266,7 @@ def handle_repository_management(form):
             _update_preference("GIT_REMOTE_PULL_ENABLED", "False")
             _update_preference("GIT_REMOTE_PULL_PRIVATE_KEY", "")
             _update_preference("GIT_REMOTE_PULL_URL", "")
-            toast(
-                "SSH Remote URL is required when enabling automatic pulling.",
-                "error",
-            )
+            toast(get_locale("toast_ssh_pull_url_required"), "error")
         else:
             _update_preference("GIT_REMOTE_PULL_ENABLED", "True")
             _update_preference("GIT_REMOTE_PULL_URL", pull_remote_url)
@@ -300,7 +289,7 @@ def handle_repository_management(form):
     db.session.commit()
     update_app_config()
 
-    toast("Repository Management Preferences updated.")
+    toast(get_locale("toast_repo_preferences_updated"))
     return redirect(url_for("admin_repository_management"))
 
 
@@ -403,11 +392,11 @@ def handle_test_mail_preferences(form):
                 subject, [recipient], body, _async=False, raise_on_error=True
             )
         except Exception as e:
-            toast("Error: {}".format(e), "error")
+            toast(get_locale("toast_testmail_error").format(error=e), "error")
         else:
-            toast("Testmail sent to {}.".format(recipient))
+            toast(get_locale("toast_testmail_sent").format(recipient=recipient))
     else:
-        toast("Invalid email address: {}".format(recipient), "error")
+        toast(get_locale("toast_testmail_invalid_email").format(recipient=recipient), "error")
     return redirect(url_for("admin_mail_preferences"))
 
 
@@ -432,7 +421,7 @@ def handle_permissions_and_registration(form):
     # commit changes to the database
     db.session.commit()
     update_app_config()
-    toast("Preferences updated.")
+    toast(get_locale("toast_preferences_updated"))
     return redirect(url_for("admin_permissions_and_registration"))
 
 
@@ -460,9 +449,9 @@ def handle_user_management(form):
     # track users that have been approved to send a notification
     # Make sure that nobody accidentally locks themselves out.
     if len(is_admin) < 1:
-        toast("You can't remove all admins", "error")
+        toast(get_locale("toast_cant_remove_all_admins"), "error")
     elif len(is_approved) < 1:
-        toast("You can't disable all users", "error")
+        toast(get_locale("toast_cant_disable_all_users"), "error")
     else:
         # update users
         for user in get_all_user():
@@ -505,7 +494,7 @@ def handle_user_management(form):
                 user.is_admin = True
                 msgs.append("enabled admin")
             if len(msgs):
-                toast("{} {} flag".format(user.email, " and ".join(msgs)))
+                toast(get_locale("toast_user_flag_updated").format(email=user.email, flags=" and ".join(msgs)))
                 app.logger.info(  # pyright: ignore
                     "{} updated {} <{}>: {}".format(
                         current_user, user.name, user.email, " and ".join(msgs)
@@ -528,7 +517,7 @@ def admin_form():
     # render form
     return render_template(
         "admin.html",
-        title="Admin",
+        title=get_locale("page_title_admin"),
         user_list=user_list,
     )
 
@@ -539,7 +528,7 @@ def mail_preferences_form():
     # query user
     return render_template(
         "admin/mail_preferences.html",
-        title="Mail preferences",
+        title=get_locale("page_title_mail_preferences"),
     )
 
 
@@ -549,7 +538,7 @@ def content_and_editing_form():
     # query user
     return render_template(
         "admin/content_and_editing.html",
-        title="Content and Editing preferences",
+        title=get_locale("page_title_content_and_editing"),
     )
 
 
@@ -558,7 +547,7 @@ def repository_management_form(git_action_result=None):
         abort(403)
     return render_template(
         "admin/repository_management.html",
-        title="Repository Management",
+        title=get_locale("page_title_repository_management"),
         git_action_result=git_action_result,
     )
 
@@ -569,7 +558,7 @@ def permissions_and_registration_form():
     # render form
     return render_template(
         "admin/permissions_and_registration.html",
-        title="Permissions and Registration",
+        title=get_locale("page_title_permissions_and_registration"),
     )
 
 
@@ -585,7 +574,7 @@ def sidebar_preferences_form():
     # render form
     return render_template(
         "admin/sidebar_preferences.html",
-        title="Sidebar Preferences",
+        title=get_locale("page_title_sidebar_preferences"),
         pages=pages,
         custom_menu=SidebarMenu().config,
     )
@@ -599,7 +588,7 @@ def user_management_form():
     # render form
     return render_template(
         "admin/user_management.html",
-        title="User Management",
+        title=get_locale("page_title_user_management"),
         user_list=user_list,
     )
 
@@ -613,7 +602,7 @@ def user_edit_form(uid):
     # render form
     return render_template(
         "user.html",
-        title="User",
+        title=get_locale("page_title_user"),
         user=user,
     )
 
@@ -662,7 +651,7 @@ def handle_user_add(form):
             toast(msg, 'danger')
         return render_template(
             "user.html",
-            title="User",
+            title=get_locale("page_title_user"),
             user=user,
         )
     # no error: store in database
@@ -672,10 +661,10 @@ def handle_user_add(form):
         user = update_user(user)
         # send_approvement_mail(user)
         app.logger.info(f"{user.name} <{user.email}> added")
-        toast(f"{user.name} <{user.email}> added")
+        toast(get_locale("toast_user_added").format(name=user.name, email=user.email))
     except Exception as e:
         app.logger.error(f"Unable to update user: {e}")
-        toast('Unable to create user. Please check the server logs.', 'danger')
+        toast(get_locale("toast_user_add_failed"), 'danger')
     return redirect(url_for("user", uid=user.id))
 
 
@@ -691,9 +680,9 @@ def handle_user_edit(uid, form):
     # delete
     if form.get("delete", False):
         if user == current_user:
-            toast(f"Unable to delete yourself.", "error")
+            toast(get_locale("toast_user_delete_self"), "error")
             return redirect(url_for("user", uid=user.id))
-        toast(f"User '{user.name} &lt;{user.email}&gt;' deleted.")
+        toast(get_locale("toast_user_deleted").format(name=user.name, email=user.email))
         app.logger.info(f"deleted user '{user.name} <{user.email}>'")
         delete_user(user)
         return redirect(url_for("admin_user_management"))
@@ -706,7 +695,7 @@ def handle_user_edit(uid, form):
             msgs.append(f"renamed '{user.name}' to '{new_name}'")
             user.name = new_name
         else:
-            toast("User name must not be empty.", "danger")
+            toast(get_locale("toast_user_name_empty"), "danger")
     # email
     if user.email != form.get("email").strip():
         if is_valid_email(form.get("email").strip()):
@@ -757,8 +746,5 @@ def handle_user_edit(uid, form):
             send_approvement_mail(user)
     except Exception as e:
         app.logger.error(f"Unable to update user: {e}")
-        toast(
-            'Unable to update the user. Please check the server logs.',
-            'danger',
-        )
+        toast(get_locale("toast_user_update_failed"), 'danger')
     return redirect(url_for("user", uid=user.id))

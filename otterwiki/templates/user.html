@@ -5,48 +5,48 @@
 <div class="card mx-auto mx-lg-20">
   <h2 class="card-title">
     {% if user.id %}
-    Edit User
+    {{ t.user_edit_title }}
     {% else %}
-    Add User
+    {{ t.user_add_title }}
     {% endif %}
   </h2>
     <form action="{{ url_for("user", uid=user.id) }}" method="POST" class="form-inline">
       <div class="form-group">
-        <label for="name" class="required w-md-200">Name</label>
+        <label for="name" class="required w-md-200">{{ t.user_name_label }}</label>
         <input type="text" class="form-control" name="name" id="name" placeholder="" value="{{user.name if user.name}}">
       </div>
       <div class="form-group">
-        <label for="name" class="required w-md-200">eMail</label>
+        <label for="name" class="required w-md-200">{{ t.user_email_label }}</label>
         <input type="text" class="form-control" name="email" id="email" placeholder="" value="{{user.email if user.email}}">
       </div>
       <div class="form-group">
-        <label for="password1" class="w-md-200">Password</label>
+        <label for="password1" class="w-md-200">{{ t.user_password_label }}</label>
         <input type="password" class="form-control" name="password1" id="password1" placeholder="" value="">
       </div>
       <div class="form-group">
-        <label for="password2" class="w-md-200">Confirm password</label>
+        <label for="password2" class="w-md-200">{{ t.user_confirm_password_label }}</label>
         <input type="password" class="form-control" name="password2" id="password2" placeholder="" value="">
       </div>
-    <h3 class="card-title">Flags and Permissions</h3>
+    <h3 class="card-title">{{ t.user_flags_title }}</h3>
     <div class="container-fluid">
       <div class="row">
     {%
       for label, name, value, note, new_row in [
         (
-          "eMail confirmed","email_confirmed",
+          t.user_flag_email_confirmed,"email_confirmed",
           user.email_confirmed,
-          "If not set, users have to confirm their email address to login." if config.EMAIL_NEEDS_CONFIRMATION else "User don't need to confirm their eMail address.",
+          t.user_flag_email_confirmed_note_required if config.EMAIL_NEEDS_CONFIRMATION else t.user_flag_email_confirmed_note_not_required,
           False
         ),
         (
-          "Approved","is_approved",user.is_approved,
-          "Auto approval is enabled." if config.AUTO_APPROVAL else "This flag has to be set by an admin.",
+          t.user_flag_approved,"is_approved",user.is_approved,
+          t.user_flag_approved_note_auto if config.AUTO_APPROVAL else t.user_flag_approved_note_manual,
           True
         ),
-        ("Read","allow_read",user.allow_read,"", False),
-        ("Write","allow_write",user.allow_write,"", False),
-        ("Upload","allow_upload",user.allow_upload,"", True),
-        ("Admin","is_admin",user.is_admin,"Users flagged as admins always have <strong>all</strong> the permissions.", False),
+        (t.user_flag_read,"allow_read",user.allow_read,"", False),
+        (t.user_flag_write,"allow_write",user.allow_write,"", False),
+        (t.user_flag_upload,"allow_upload",user.allow_upload,"", True),
+        (t.user_flag_admin,"is_admin",user.is_admin,t.user_flag_admin_note, False),
       ]
     %}
     <div class="col-sm-4 pr-5">
@@ -70,8 +70,8 @@
       </div> {# row #}
     </div> {# container-fluid #}
       {# #}
-      <input class="btn btn-primary" type="submit" value="{% if user.id %}Update{% else %}Add{% endif %}">
-      <a href="{{ url_for("admin_user_management") }}" class="btn" role="button">Cancel</a>
+      <input class="btn btn-primary" type="submit" value="{% if user.id %}{{ t.user_update_btn }}{% else %}{{ t.user_add_submit_btn }}{% endif %}">
+      <a href="{{ url_for("admin_user_management") }}" class="btn" role="button">{{ t.user_cancel_btn }}</a>
     </form>
 </div>{# card #}
 </div>{# w-600 container #}
@@ -79,15 +79,15 @@
 {% if user.id %}
 <div class="col-sm-12 col-md-12 col-lg-10">
 <div class="card mx-auto m-lg-20">
-    <h2 class="card-title">Delete User</h2>
+    <h2 class="card-title">{{ t.user_delete_title }}</h2>
     <form action="{{ url_for("user", uid=user.id) }}" method="POST" class="form-inline">{# class="w-400 mw-full" <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% --> #}
       <div class="form-group">
         <div class="custom-checkbox">
           <input type="checkbox" id="agree-to-terms" name="delete" value="1">
-          <label for="agree-to-terms">Please check to confirm deleting <strong>{{user.name}}</strong>.</label>
+          <label for="agree-to-terms">{{ t.user_delete_confirm_label }} <strong>{{user.name}}</strong>.</label>
         </div>
       </div>
-      <input class="btn btn-danger" type="submit" value="Delete">
+      <input class="btn btn-danger" type="submit" value="{{ t.user_delete_btn }}">
     </form>
 </div>{# card #}
 </div>{# w-600 container #}

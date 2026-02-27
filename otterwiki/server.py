@@ -237,7 +237,8 @@ plugin_manager.hook.setup(
 def template_debug_unixtime(s: int) -> str:
     if app.debug:
 
-        return "{}?{}".format(s, datetime.datetime.now().strftime("%s"))
+        return "{}?{}".format(s, int(datetime.datetime.now().timestamp())) #windows
+        #return "{}?{}".format(s, datetime.datetime.now().strftime("%s"))
     else:
         return "{}?{}".format(s, os.getenv("GIT_TAG", None) or __version__)
 
@@ -300,6 +301,25 @@ def slugify(s, keep_slashes=True):
 
 
 app.jinja_env.globals.update(os_getenv=os.getenv)
+
+import importlib
+
+
+def _get_translations():
+    locale = app.config.get("SITE_LANG", "en")
+    try:
+        return importlib.import_module(f"otterwiki.translations.{locale}").translations
+    except ModuleNotFoundError:
+        from otterwiki.translations.en import translations
+        return translations
+
+
+app.jinja_env.globals.update(t=_get_translations())
+
+
+@app.context_processor
+def inject_translations():
+    return dict(t=_get_translations())
 
 from otterwiki.helper import load_custom_html
 
