@@ -237,8 +237,8 @@ plugin_manager.hook.setup(
 def template_debug_unixtime(s: int) -> str:
     if app.debug:
 
-        return "{}?{}".format(s, int(datetime.datetime.now().timestamp())) #windows
-        #return "{}?{}".format(s, datetime.datetime.now().strftime("%s"))
+        #return "{}?{}".format(s, int(datetime.datetime.now().timestamp())) #windows
+        return "{}?{}".format(s, datetime.datetime.now().strftime("%s"))
     else:
         return "{}?{}".format(s, os.getenv("GIT_TAG", None) or __version__)
 
